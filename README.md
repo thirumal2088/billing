@@ -1,17 +1,5 @@
-# Rainbow Sports Offline Billing — Netlify-ready
+# Rainbow Sports Billing — invoice reference layout
 
-This package contains the saved `Rainbow_Billing.html` version renamed to `index.html` for static hosting.
+Deploy on Netlify as a static site: build command blank; publish directory `.`. GitHub: upload these four files at repository root.
 
-## Deploy to GitHub and Netlify
-1. Create a new GitHub repository.
-2. Upload `index.html`, `netlify.toml`, and `README.md` to the repository root.
-3. In Netlify choose **Add new project → Import an existing project → GitHub** and select the repository.
-4. Set **Build command** to blank and **Publish directory** to `.` then deploy.
-
-Alternatively, drag the unzipped folder into Netlify's manual deploy interface.
-
-## Important limitations
-- This is a browser-local offline billing demo, not a multi-user server/database ERP.
-- Bills and other data saved in browser storage are device/browser specific and are not synchronized across devices.
-- Clearing browser storage can delete saved records. Use the app's **Download Backup** function regularly.
-- A public Netlify URL does not add authentication or secure customer-data storage. Do not treat it as a secure production ERP without further development.
+The supplied invoice image is used as the exact print background. Printing is A4 landscape (to preserve reference proportions); enable background graphics in print dialog. Customer, dates, invoice number, first four items and amounts are overlaid. HSN/SAC and order fields remain blank; the current app does not collect them. GST is calculated from per-item rates and GST percentages, split equally into CGST and SGST; verify applicable tax treatment. This is an offline localStorage app, not a shared online database.
