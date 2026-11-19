@@ -1,2 +1,3 @@
-Rainbow Sports Billing — Team / Single Order update.
-Customer Order: select Team Order or Single Order, optional team name. Filter history and monthly CSV by order category. Existing custom orders default to Team Order for backward compatibility; edit them if needed. Direct Sale remains separate. Data stored locally in browser: back up before updating.
+Rainbow Sports Billing - Voice Note, JPG Design and Excel attachments update.
+Open index.html or deploy files to Netlify.
+All attachments optional. Stored in browser IndexedDB, not in JSON backup. Use same browser/device. Excel XLSX preview requires internet for SheetJS; CSV previews offline. Microphone requires HTTPS and permission.
