@@ -1,9 +1,1 @@
-Rainbow Sports Billing — Dynamic Production Stages
-
-Static Netlify deployment: upload these files to GitHub repository root. Netlify build command: blank; publish directory: .
-
-Bill History -> Stages opens an independent production tracker for each Customer Order. Add unlimited optional stages, edit names/notes, tick complete, reorder, delete. Direct Sales are separate.
-
-Data uses browser localStorage; back up before updates. Different devices do not sync. Customer invoice public links and automatic WhatsApp sending require a backend and are not included.
-
-Payment QR needs testing with BharatPe; QR image included.
+Rainbow Sports billing update. Deploy folder contents to Netlify. Features: customer courier address and prior bill lookup, staff selection, custom-order-only reward coins (₹100=1 coin, 1 coin=₹1), monthly GST/non-GST CSV exports, courier label. Data is browser-local; backup regularly. GSTIN and sender PIN must be verified/set in Settings. Existing invoices are not synced across devices. Coin accrual is on fully paid custom orders; no Direct Sale rewards.
