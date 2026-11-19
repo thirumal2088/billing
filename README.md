@@ -1,1 +1,5 @@
-Rainbow Sports Billing — Netlify static app. Deploy extracted folder to Netlify. Print Invoice → select A4 / 58 / 80 / 100 / custom width; choose Save as PDF in browser print destination. Printer driver must support selected roll width. Browser localStorage data stays on the same browser; back up before replacing. Verify GSTIN and shop details before use.
+Rainbow Sports Billing - Simplified New Invoice Layout
+
+Staff Name first, Customer Name, Phone, Products; Invoice Date assigned automatically; optional delivery date for custom orders, no delivery date for direct sale. Courier and email under Optional Details. Existing browser localStorage key unchanged.
+
+Deploy extracted folder to Netlify. Back up billing data first.
