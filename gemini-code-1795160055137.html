@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rainbow Sports Billing</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{
+  font-family:'Segoe UI',Arial,sans-serif;
+  color:#132c4c;
+  background:linear-gradient(135deg,#fff5f5 0%,#fffbeb 25%,#f0fdf4 50%,#eff6ff 75%,#faf5ff 100%);
+  min-height:100vh;
+}
+*{box-sizing:border-box}
+body{margin:0;background:transparent}
+
+/* Vibrant Rainbow Header */
+header{
+  padding:20px 4%;
+  background:linear-gradient(115deg,#ff4b4b 0%,#ff9800 22%,#eab308 42%,#10b981 62%,#3b82f6 82%,#8b5cf6 100%);
+  color:white;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 4px 18px rgba(139,92,246,0.25);
+}
+header h1{margin:0;font-size:26px;text-shadow:0 2px 5px rgba(0,0,0,0.3);letter-spacing:0.5px}
+header small{font-weight:bold;display:block;margin-top:3px;opacity:0.95}
+
+main{max-width:1250px;margin:18px auto;padding:0 14px}
+.tabs,.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+
+/* Colorful Buttons */
+button{background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;border:0;border-radius:9px;padding:10px 15px;cursor:pointer;font-weight:700;transition:0.18s;box-shadow:0 2px 6px rgba(37,99,235,0.2)}
+button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+button.secondary{background:#ffffff;color:#1e3a8a;border:1px solid #cbd5e1;box-shadow:none}
+button.secondary:hover{background:#f1f5f9}
+button.danger{background:linear-gradient(135deg,#ef4444,#dc2626)}
+button.new-inv-btn{background:linear-gradient(135deg,#ec4899,#f97316,#eab308);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.25);font-size:16px;padding:13px 22px;box-shadow:0 5px 15px rgba(249,115,22,0.35)}
+button.new-direct-btn{background:linear-gradient(135deg,#10b981,#0284c7);font-size:15px;padding:13px 20px;box-shadow:0 5px 15px rgba(16,185,129,0.3)}
+
+.tabs button{background:#ffffff;color:#334155;border:1px solid #e2e8f0;box-shadow:0 2px 5px rgba(0,0,0,0.04)}
+.tabs button.active{background:linear-gradient(110deg,#f43f5e,#f59e0b,#10b981,#3b82f6,#8b5cf6);color:white;border:0;box-shadow:0 4px 12px rgba(99,102,241,0.3)}
+
+/* Rainbow Top-Border Panels */
+.panel{
+  background:rgba(255,255,255,0.96);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:18px;
+  box-shadow:0 6px 20px rgba(30,41,59,0.06);
+  border-top:4px solid transparent;
+  border-image:linear-gradient(90deg,#ff4b4b,#ff9800,#eab308,#10b981,#3b82f6,#8b5cf6) 1;
+}
+
+.page{display:none}
+.page.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+
+/* Multi-color Stat Cards */
+.stat{border-radius:12px;padding:15px;color:#0f172a;border:1px solid #e2e8f0}
+.stat:nth-child(1){background:linear-gradient(135deg,#fff1f2,#ffe4e6);border-color:#fecdd3}
+.stat:nth-child(2){background:linear-gradient(135deg,#fefce8,#fef08a);border-color:#fde047}
+.stat:nth-child(3){background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-color:#a7f3d0}
+.stat:nth-child(4){background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#bfdbfe}
+.stat b{display:block;font-size:23px;margin-top:6px;color:#0f172a}
+
+/* Dashboard Hero & Rainbow Weekly 6-Day (Mon-Sat) Sales Grid */
+.dash-hero{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:2px dashed #e2e8f0}
+.week-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:12px}
+.day-card{border-radius:12px;padding:13px 10px;text-align:center;border:1px solid rgba(0,0,0,0.08);transition:0.2s}
+.day-card:nth-child(1){background:linear-gradient(160deg,#fee2e2,#fecaca)}
+.day-card:nth-child(2){background:linear-gradient(160deg,#ffedd5,#fed7aa)}
+.day-card:nth-child(3){background:linear-gradient(160deg,#fef9c3,#fef08a)}
+.day-card:nth-child(4){background:linear-gradient(160deg,#dcfce7,#bbf7d0)}
+.day-card:nth-child(5){background:linear-gradient(160deg,#dbeafe,#bfdbfe)}
+.day-card:nth-child(6){background:linear-gradient(160deg,#f3e8ff,#e9d5ff)}
+
+.day-card.today{outline:3px solid #1e293b;transform:translateY(-3px);box-shadow:0 8px 18px rgba(15,23,42,0.15)}
+.day-card .day-name{font-size:13px;font-weight:900;color:#1e293b;text-transform:uppercase;letter-spacing:0.6px}
+.day-card .day-date{font-size:11px;color:#475569;margin:2px 0 6px;font-weight:600}
+.day-card .day-amt{font-size:18px;font-weight:900;color:#0f172a;margin:4px 0}
+.day-card .day-cnt{font-size:11px;color:#fff;font-weight:800;background:#1e293b;padding:3px 9px;border-radius:12px;display:inline-block}
+
+label{display:block;font-size:13px;font-weight:bold;margin:8px 0 4px;color:#1e293b}
+input,select,textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.15)}
+table{width:100%;border-collapse:collapse;min-width:540px}
+th,td{padding:10px;border-bottom:1px solid #e2e8f0;text-align:left}
+th{background:linear-gradient(90deg,#eff6ff,#f5f3ff);color:#1e1b4b;font-weight:800}
+.scroll{overflow:auto}
+.muted{color:#64748b;font-size:13px}
+.pill{padding:4px 10px;background:linear-gradient(90deg,#fef3c7,#fce7f3);color:#9d174d;font-weight:bold;border-radius:20px;font-size:12px}
+.hidden{display:none!important}
+#printarea{display:none}
+#fixedqr{width:140px;height:140px;object-fit:contain}
+#dynamicqr{width:140px;height:140px;display:flex;align-items:center;justify-content:center}
+#dynamicqr img{max-width:140px}
+.qrrow{display:flex;gap:25px;flex-wrap:wrap;align-items:center}
+.qrbox{padding:12px;border:2px dashed #a5b4fc;border-radius:12px;text-align:center;background:#f8fafc}
+
+/* Bold Colorful Rack Badge & Cards */
+.rack-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#f59e0b,#ef4444);
+  color:#ffffff;font-size:18px;font-weight:900;
+  padding:6px 13px;border-radius:9px;letter-spacing:0.6px;
+  cursor:pointer;border:2px solid #fff;
+  box-shadow:0 3px 8px rgba(239,68,68,0.35);
+}
+.rack-badge:hover{filter:brightness(1.1);transform:scale(1.03)}
+.rack-assign-btn{background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;font-weight:800;padding:8px 12px;border-radius:8px}
+.rack-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:12px;margin-top:10px}
+.rack-card{border:2px solid #e2e8f0;background:#ffffff;border-radius:12px;padding:13px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;box-shadow:0 3px 10px rgba(0,0,0,0.04)}
+.rack-card.has-rack{border-color:#6366f1;background:linear-gradient(145deg,#eef2ff,#fdf4ff)}
+.rack-card-number{
+  font-size:27px;font-weight:900;color:#ffffff;
+  background:linear-gradient(110deg,#ec4899,#f97316,#eab308);
+  text-shadow:0 1px 3px rgba(0,0,0,0.3);
+  padding:6px 12px;border-radius:10px;display:block;text-align:center;cursor:pointer;
+}
+
+/* Top GST Selector Bar */
+.top-gst-bar{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+  background:linear-gradient(90deg,#fff7ed,#fefce8,#ecfdf5,#eff6ff);
+  border:1px solid #cbd5e1;padding:12px 15px;border-radius:11px;margin:14px 0 10px;
+}
+.top-gst-bar select{width:auto;min-width:180px;font-weight:800;background:#fff;border:2px solid #6366f1}
+
+/* Invoice Print Styles */
+#invoiceprint{color:#0a2e5c;background:white;padding:14px;min-height:650px}
+.invoicehead{display:flex;justify-content:space-between;align-items:center;border-top:8px solid #ec6b42;border-bottom:5px solid #6d2b9c;padding:10px;gap:10px}
+.invoicehead h1{font-size:27px;margin:0}
+.gold{color:#b98a13}
+.invoicegrid{display:grid;grid-template-columns:1.3fr 1fr;gap:15px;margin:15px 0}
+.invtable th{background:#064078;color:white}
+.invtable td{height:32px}
+.invfooter{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;border-bottom:7px solid #2a87d5;padding-bottom:10px;margin-top:18px}
+.invfooter img{width:100px;height:100px;object-fit:contain}
+.invfooter .qrsmall{width:95px;height:95px}
+.totals{margin-left:auto;max-width:330px}
+.totals div{display:flex;justify-content:space-between;padding:6px;border-bottom:1px solid #ddd}
+.totals div:last-child{background:#dceefc;font-size:19px;font-weight:bold}
+.invsmall{font-size:12px}
+
+@media print{
+ @page{size:auto;margin:5mm}
+ header,main,#previewdialog,#printdialog{display:none!important}
+ #printarea{display:block!important}
+ #invoiceprint{padding:0;min-height:0;width:100%}
+ #invoiceprint table{min-width:0!important;table-layout:fixed}
+ #invoiceprint th,#invoiceprint td{overflow-wrap:anywhere}
+ #invoiceprint img{max-width:100%}
+ body{background:white}
+ *{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+}
+@media screen{#printarea{display:none}}
+
+.rack-result{border:1px solid #d5e0ee;border-radius:12px;padding:14px;margin:12px 0;background:#f7faff}
+.rack-hero{font-size:clamp(30px,7vw,55px);font-weight:900;line-height:1.15;color:#133c73;margin:7px 0}
+.rack-result .actions{margin-top:10px}
+.rack-result .muted{font-size:13px}
+.rack-result button{margin:4px}
+.rack-tag{font-weight:700}
+.rack-result input{max-width:145px;display:inline-block}
+.stagebox{background:#f8fbff;border:1px solid #cbd8ea;border-radius:12px;padding:15px;margin:12px 0}
+.stage-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:9px 0}
+.stage-row input[type=text]{flex:1;min-width:125px}
+.stage-row .stage-note{flex:2;min-width:130px}
+.stage-row button{padding:8px}
+.stage-controls{display:flex;gap:8px;flex-wrap:wrap}
+button.save-bill{background:linear-gradient(135deg,#10b981,#059669);font-size:17px;padding:14px 26px;min-height:48px}
+.bill-items{min-width:500px}
+.bill-items th,.bill-items td{padding:7px}
+.bill-items input{padding:8px}
+.bill-items .qty{min-width:70px}
+.bill-items .rate{min-width:95px}
+.bill-items .desc{min-width:170px}
+.bill-items .line-amount{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;font-weight:900;font-size:16px;color:#0f172a}
+.bill-totals{padding:14px;background:linear-gradient(90deg,#eff6ff,#f0fdf4);border:1px solid #bfdbfe;border-radius:10px;font-weight:800;font-size:15px;color:#0f172a}
+
+@media (max-width: 900px){
+ .week-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width: 600px){
+ .week-grid{grid-template-columns:repeat(2,1fr)}
+ header h1{font-size:20px}
+ main{padding:0 10px 80px}
+ .tabs{position:sticky;top:0;z-index:40;flex-wrap:nowrap;overflow-x:auto;background:#fff;padding:8px;margin:0 -10px 12px;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
+ .tabs button{flex:0 0 auto;white-space:nowrap}
+ .actions{display:grid;grid-template-columns:1fr 1fr}
+ .actions button:only-child{grid-column:1/-1}
+ .invoicehead{flex-wrap:wrap}
+ .invoicegrid{grid-template-columns:1fr}
+}
+</style>
+<style id="dynamicprintstyle"></style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🌈 RAINBOW SPORTS — BOMMIDI</h1>
+    <small>JUSTHUE® • Billing, Weekly Sales & Rack Management</small>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="new-inv-btn" onclick="newBill('order')">+ New Invoice (Order)</button>
+    <button class="new-direct-btn" onclick="newBill('direct')">+ Direct Sale</button>
+  </div>
+</header>
+
+<main>
+  <div class="tabs">
+    <button onclick="show('dashboard')" id="tabdashboard">🏠 Dashboard</button>
+    <button onclick="newBill('order')" id="taborder">🧾 New Invoice</button>
+    <button onclick="newBill('direct')" id="tabdirect">⚡ Direct Sale</button>
+    <button onclick="show('history')" id="tabhistory">📚 Bill History</button>
+    <button onclick="show('production')" id="tabproduction">⚙️ Production</button>
+    <button onclick="show('credit')" id="tabcredit">💳 Credit List</button>
+    <button onclick="show('reports')" id="tabreports">📊 Monthly Exports</button>
+    <button onclick="show('settings')" id="tabsettings">⚙️ Settings / Backup</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="page">
+    <div class="panel">
+      <div class="dash-hero">
+        <div>
+          <h2 style="margin:0;font-size:22px">🌈 Dashboard Overview</h2>
+          <span class="muted">Quick billing, weekly sales & active order racks</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="new-inv-btn" onclick="newBill('order')">+ New Invoice</button>
+          <button class="new-direct-btn" onclick="newBill('direct')">+ Direct Sale</button>
+        </div>
+      </div>
+
+      <!-- 6-DAY WEEKLY SALES TRACKER (MON - SAT) -->
+      <div style="margin-bottom:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <b style="font-size:15px">📅 This Week Sales (Monday – Saturday)</b>
+          <span class="pill" id="weekrange"></span>
+        </div>
+        <div class="week-grid" id="weeklysales"></div>
+      </div>
+
+      <!-- OVERALL STATS -->
+      <div class="grid" id="stats"></div>
+    </div>
+
+    <!-- ACTIVE RACK SYSTEM PANEL ON STARTING PAGE -->
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <h3 style="margin:0">🗄️ Order Rack System (Direct Sale தவிர அனைத்து ஆர்டர்களும்)</h3>
+        <span class="pill" id="activeordercount"></span>
+      </div>
+      <p class="muted" style="margin:6px 0 10px">எந்த ஆர்டருக்கும் ரேக் நம்பர் அசைன் செய்ய அல்லது மாற்ற அதன் மீது கிளிக் செய்யவும். <b>Delivered</b> ஆனதும் ரேக் நம்பர் தானாகவே நீங்கிவிடும்.</p>
+      <div id="rackboard" class="rack-card-grid"></div>
+    </div>
+
+    <!-- PENDING BILLS & QUICK SEARCH -->
+    <div class="panel">
+      <h3>⏳ Pending Bills & Quick Search <span id="pendingcount" class="pill"></span></h3>
+      <div class="grid">
+        <div>
+          <label>Quick Search — Phone / Invoice No / Customer Name / Rack No</label>
+          <input id="dashsearch" oninput="renderDashboard()" placeholder="Search invoice, customer, phone or rack..." autocomplete="off">
+        </div>
+      </div>
+      <div id="rackquickresults" aria-live="polite"></div>
+      <div id="dashresults" class="scroll"></div>
+      <div id="pendingrows" class="scroll"></div>
+      <div class="actions">
+        <button class="secondary" onclick="resetSkipped()">Show Skipped Bills</button>
+        <button class="secondary" onclick="show('history')">View All Bill History</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>🕒 Recent Bills</h3>
+      <div id="recent"></div>
+    </div>
+  </section>
+
+  <!-- BILL EDITOR -->
+  <section id="editor" class="page">
+    <div class="panel">
+      <h2 id="editortitle">New Bill</h2>
+      <div class="grid">
+        <div>
+          <label>1. Staff Name / Order Taken By *</label>
+          <select id="takenby"></select>
+        </div>
+        <div>
+          <label>2. Customer Name</label>
+          <input id="customer" placeholder="Customer Name">
+        </div>
+        <div>
+          <label>3. Mobile Number — auto-fill Customer Name</label>
+          <input id="mobile" type="tel" inputmode="numeric" maxlength="15" autocomplete="off" placeholder="Enter customer phone number">
+          <small id="phonehint" class="muted" aria-live="polite">Enter existing mobile number to fill customer name automatically.</small>
+        </div>
+      </div>
+
+      <div id="ordertypepanel" class="grid" style="margin-top:10px">
+        <div>
+          <label>Order Type *</label>
+          <select id="ordertype" onchange="toggleTeamName()">
+            <option value="team">Team Order</option>
+            <option value="single">Single Order</option>
+          </select>
+        </div>
+        <div id="teamnamebox">
+          <label>Team Name (Optional)</label>
+          <input id="teamname" placeholder="Cricket Club / School / Team">
+        </div>
+        <div>
+          <label>Rack Number (Optional — Direct Sale தவிர)</label>
+          <input id="editorrack" placeholder="e.g. R-12" maxlength="24" style="font-weight:900;text-transform:uppercase;font-size:16px">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="secondary" onclick="viewCustomerBills()">Previous Bills</button>
+      </div>
+      <div id="customerhistory" class="muted"></div>
+
+      <!-- TOP GST PERCENTAGE SELECTOR -->
+      <div class="top-gst-bar">
+        <div>
+          <b style="font-size:16px">🧾 Bill Items</b>
+          <div class="muted">Product Name, Qty மற்றும் Rate கொடுத்தால் உடனே Total கூட்டி வந்துவிடும்</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <label for="billgst" style="margin:0;font-size:14px">GST % (Included):</label>
+          <select id="billgst" onchange="calculate()">
+            <option value="0">0% (Non-GST)</option>
+            <option value="5" selected>5% GST</option>
+            <option value="12">12% GST</option>
+            <option value="18">18% GST</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="scroll">
+        <table class="bill-items">
+          <thead>
+            <tr>
+              <th scope="col" style="width:55px">S.No</th>
+              <th>Product Name</th>
+              <th style="width:105px">Qty</th>
+              <th style="width:130px">Rate ₹</th>
+              <th style="width:135px;text-align:right">Total ₹</th>
+              <th style="width:70px">Action</th>
+            </tr>
+          </thead>
+          <tbody id="itemrows"></tbody>
+        </table>
+      </div>
+
+      <div class="actions">
+        <button class="secondary" onclick="addItem()">+ Add Item</button>
+      </div>
+      <p id="billtotal" class="bill-totals"></p>
+      <input type="hidden" id="billdate">
+
+      <details id="extraoptions">
+        <summary style="cursor:pointer;font-weight:bold;padding:10px 0">Optional Details (Delivery / Courier / Email / Status)</summary>
+        <div class="grid">
+          <div id="deliveryfield">
+            <label>Expected Delivery Date (Optional)</label>
+            <input type="date" id="deliverydate">
+          </div>
+          <div>
+            <label>Order / Delivery Status</label>
+            <select id="status">
+              <option value="Pending Bills">Pending Bills</option>
+              <option value="Packing Completed">Packing Completed</option>
+              <option value="Ready in Rack">Ready in Rack</option>
+              <option value="Courier / Bus">Courier / Bus</option>
+              <option value="Delivered">Delivered</option>
+            </select>
+          </div>
+          <div>
+            <label>Delivered By</label>
+            <select id="deliveredby"></select>
+          </div>
+          <div>
+            <label>Customer Email (Optional)</label>
+            <input id="email" type="email" placeholder="Optional email">
+          </div>
+        </div>
+        <label style="display:block;margin:12px 0">
+          <input type="checkbox" id="couriertoggle" onchange="document.getElementById('courierfields').style.display=this.checked?'block':'none'"> Courier / Parcel — Add Receiver Details
+        </label>
+        <div id="courierfields" style="display:none">
+          <div class="grid">
+            <div><label>Receiver Name</label><input id="receiver" placeholder="Receiver name"></div>
+            <div><label>Receiver Phone</label><input id="receiverphone" placeholder="Receiver phone"></div>
+            <div><label>Door / Street / Area</label><input id="address" placeholder="Address"></div>
+            <div><label>Village / City</label><input id="city"></div>
+            <div><label>District</label><input id="district"></div>
+            <div><label>State</label><input id="state" value="Tamil Nadu"></div>
+            <div><label>PIN Code</label><input id="pincode" maxlength="6" inputmode="numeric"></div>
+            <div><label>Landmark</label><input id="landmark"></div>
+          </div>
+        </div>
+      </details>
+
+      <details id="attachmentsection" style="margin:12px 0;border:1px solid #cbd9eb;border-radius:10px;padding:12px">
+        <summary style="cursor:pointer;font-weight:bold">🎙️ Voice Note / 🖼️ JPG Design / 📊 Excel Attachments (Optional)</summary>
+        <p class="muted">Optional. Attachments are stored in this browser. Open an existing bill to view, download, replace or delete.</p>
+        <div class="actions">
+          <button type="button" id="recordbtn" onclick="toggleVoiceRecording()">🎙️ Start Voice Recording</button>
+          <button type="button" class="secondary" onclick="document.getElementById('designupload').click()">+ JPG Design</button>
+          <button type="button" class="secondary" onclick="document.getElementById('excelupload').click()">+ Excel / CSV</button>
+        </div>
+        <input class="hidden" id="designupload" type="file" accept="image/jpeg,.jpg,.jpeg" multiple onchange="addAttachments(this,'image')">
+        <input class="hidden" id="excelupload" type="file" accept=".xlsx,.xls,.csv" multiple onchange="addAttachments(this,'excel')">
+        <p id="recordstatus" class="muted" aria-live="polite"></p>
+        <div id="attachmentlist"></div>
+        <div id="attachmentpreview" style="overflow:auto;max-height:420px"></div>
+      </details>
+
+      <div class="grid">
+        <div><label>Discount Amount ₹</label><input type="number" min="0" id="discount" value="0" oninput="calculate()"></div>
+        <div><label>Payment Mode</label><select id="paymode"><option>Cash</option><option>UPI / BharatPe</option><option>Bank</option><option>Other</option></select></div>
+        <div><label>Amount Received Now ₹</label><input type="number" min="0" id="received" value="0" oninput="calculate()"></div>
+        <div><label>Remarks</label><textarea id="remarks" rows="2"></textarea></div>
+      </div>
+
+      <div id="rewardpanel" class="panel" style="margin-top:12px">
+        <h3>🌈 Custom Order Reward Coins</h3>
+        <p class="muted">₹100 = 1 Coin; 1 Coin = ₹1. Earn after full payment. Direct Sale has no coins or redemption.</p>
+        <div id="coininfo"></div>
+        <label>Redeem Coins (₹1 each)</label>
+        <input id="redeem" type="number" min="0" value="0" oninput="calculate()">
+      </div>
+
+      <div class="actions">
+        <button class="save-bill" onclick="saveBill()">💾 Save Bill</button>
+        <button class="secondary" onclick="previewDraft()">👁 Preview Bill</button>
+        <button class="secondary" onclick="whatsappDraft()">💬 WhatsApp</button>
+        <button class="secondary" onclick="newBill(currentType)">Clear</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BILL HISTORY -->
+  <section id="history" class="page">
+    <div class="panel">
+      <h2>📚 Bill History</h2>
+      <div class="grid">
+        <div>
+          <label>Billing Type</label>
+          <select id="filtertype" onchange="renderHistory()">
+            <option value="all">All</option>
+            <option value="order">Customer Orders only</option>
+            <option value="direct">Direct Sales only</option>
+          </select>
+        </div>
+        <div>
+          <label>Customer Order Category</label>
+          <select id="filterordercategory" onchange="renderHistory()">
+            <option value="all">All Orders</option>
+            <option value="team">Team Orders</option>
+            <option value="single">Single Orders</option>
+          </select>
+        </div>
+        <div>
+          <label>Order Status</label>
+          <select id="filterstatus" onchange="renderHistory()">
+            <option value="all">All Statuses</option>
+            <option>Pending Bills</option>
+            <option>Packing Completed</option>
+            <option>Ready in Rack</option>
+            <option>Courier / Bus</option>
+            <option>Delivered</option>
+          </select>
+        </div>
+        <div>
+          <label>Search</label>
+          <input id="filtersearch" oninput="renderHistory()" placeholder="Bill no / customer / mobile / rack">
+        </div>
+      </div>
+      <div id="historyrows" class="scroll"></div>
+    </div>
+  </section>
+
+  <!-- PRODUCTION -->
+  <section id="production" class="page">
+    <div class="panel">
+      <h2>⚙️ Production Stage Tracker</h2>
+      <p class="muted">Customer Orders only. Open a bill from History or Dashboard to edit its stages.</p>
+      <div id="stageeditor"></div>
+    </div>
+  </section>
+
+  <!-- CREDIT LIST -->
+  <section id="credit" class="page">
+    <div class="panel">
+      <h2>💳 Credit List — Orders & Direct Sales</h2>
+      <div id="creditrows" class="scroll"></div>
+    </div>
+  </section>
+
+  <!-- MONTHLY EXPORTS -->
+  <section id="reports" class="page">
+    <div class="panel">
+      <h2>📊 Monthly GST / Normal Bill Export</h2>
+      <div class="grid">
+        <div><label>Month</label><input id="exportmonth" type="month"></div>
+        <div><label>Category</label><select id="exportcategory"><option value="gst">GST Bills</option><option value="normal">Normal Bills (No GST)</option><option value="all">All Bills</option></select></div>
+        <div><label>Order Category</label><select id="exportordercategory"><option value="all">Team + Single</option><option value="team">Team Orders</option><option value="single">Single Orders</option></select></div>
+        <div><label>Billing Type</label><select id="exporttype"><option value="all">Both</option><option value="order">Custom Orders</option><option value="direct">Direct Sales</option></select></div>
+      </div>
+      <button onclick="exportMonthly()">Export Excel-compatible CSV</button>
+      <p class="muted">CSV opens in Excel. For PDF, use browser Print → Save as PDF from the invoice.</p>
+    </div>
+  </section>
+
+  <!-- SETTINGS / BACKUP -->
+  <section id="settings" class="page">
+    <div class="panel">
+      <h2>Shop / Sender Details</h2>
+      <div class="grid">
+        <div><label>Shop Name</label><input id="shopname" value="RAINBOW SPORTS"></div>
+        <div><label>Shop Phone</label><input id="shopphone" value="9943295343"></div>
+        <div><label>Full Address</label><textarea id="shopaddress">Bommidi, Pappireddipatti Taluk, Dharmapuri District, Tamil Nadu</textarea></div>
+        <div><label>Shop PIN Code</label><input id="shoppin" maxlength="6" placeholder="Enter shop PIN"></div>
+        <div><label>GSTIN (verify)</label><input id="shopgst" value="33ALFPT8682N1Z9" placeholder="Enter verified GSTIN"></div>
+      </div>
+      <button onclick="saveShop()">Save Shop Details</button>
+      <h3>Staff</h3>
+      <p>திருமால், Nandhini, Kumatha, Geetha, Revathi, Bharathi, Archana, Surya, Jeevitha</p>
+      <h2>Payment QR Settings</h2>
+      <p>UPI ID (locked in this version): <b>BHARATPE2C0Y0N0U1U34312@unitype</b></p>
+      <div class="qrrow">
+        <div class="qrbox"><img id="fixedqr" src="assets/bharatpe-fixed-qr.png" alt="Original BharatPe QR"><div>Fixed QR</div></div>
+        <div><label>Custom Amount ₹</label><input id="qramount" type="number" min="0" value="1" oninput="makeQR()"><div id="dynamicqr"></div><div>Amount QR</div></div>
+      </div>
+      <hr>
+      <h3>Backup / Restore</h3>
+      <div class="actions">
+        <button onclick="backup()">Download JSON Backup</button>
+        <button class="secondary" onclick="document.getElementById('restorefile').click()">Restore JSON Backup</button>
+        <input type="file" id="restorefile" accept=".json" class="hidden" onchange="restoreBackup(event)">
+      </div>
+      <p class="muted">Important: Data is saved only in this browser on this device. Take regular JSON backups.</p>
+    </div>
+  </section>
+</main>
+
+<!-- PRINT DIALOG -->
+<div id="printdialog" class="hidden" role="dialog" aria-modal="true" style="position:fixed;inset:0;background:#10223b99;z-index:9999;display:flex;align-items:center;justify-content:center;padding:15px">
+  <div class="panel" style="width:min(480px,100%);max-height:90vh;overflow:auto;margin:0">
+    <h2>Invoice Print / PDF</h2>
+    <label>Paper Size</label>
+    <select id="paperpreset" onchange="updatePrintWidth()">
+      <option value="a4">A4 Portrait — 210 × 297 mm</option>
+      <option value="58">Thermal 58 mm</option>
+      <option value="80">Thermal 80 mm (3-inch class)</option>
+      <option value="100">Thermal 100 mm (4-inch class)</option>
+      <option value="custom">Custom width (mm)</option>
+    </select>
+    <div id="customwidthbox" class="hidden"><label>Paper width in mm</label><input type="number" id="customwidth" min="40" max="210" value="80"></div>
+    <div class="actions">
+      <button onclick="startInvoicePrint()">Print / Save as PDF</button>
+      <button class="secondary" onclick="closePrintDialog()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW DIALOG -->
+<div id="previewdialog" class="hidden" role="dialog" aria-modal="true" style="position:fixed;inset:0;background:#10223bd9;z-index:9998;overflow:auto;padding:15px">
+  <div style="max-width:850px;margin:auto">
+    <div class="panel" style="position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+      <b style="flex:1">👁 Invoice Preview</b>
+      <button type="button" onclick="openPrintDialog()">🖨 Print / PDF</button>
+      <button type="button" style="background:#188653" onclick="whatsappCurrent()">💬 WhatsApp</button>
+      <button type="button" class="secondary" onclick="closeInvoicePreview()">Close ✕</button>
+    </div>
+    <div id="previewpaper" style="background:white;box-shadow:0 8px 30px #1115;border-radius:8px;overflow:auto"></div>
+  </div>
+</div>
+
+<div id="printarea"><div id="invoiceprint"></div></div>
+
+<script>
+const UPI='BHARATPE2C0Y0N0U1U34312@unitype',KEY='rainbow_billing_v3';
+let bills=JSON.parse(localStorage.getItem(KEY)||'[]'),currentType='order',editId=null;
+const $=id=>document.getElementById(id),
+money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),
+esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function persist(){localStorage.setItem(KEY,JSON.stringify(bills))}
+
+function show(page){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  $(page).classList.add('active');
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));
+  let t=$('tab'+page);
+  if(t)t.classList.add('active');
+  if(page==='dashboard')renderDashboard();
+  if(page==='history')renderHistory();
+  if(page==='credit')renderCredit();
+  if(page==='settings'){makeQR();loadShop()}
+  if(page==='reports')$('exportmonth').value=new Date().toISOString().slice(0,7);
+}
+
+function nextNo(type){
+  let prefix=type==='order'?'RS':'DS',
+  nums=bills.filter(x=>x.type===type).map(x=>Number(x.no.split('-').pop())||0);
+  return prefix+'-'+String(Math.max(0,...nums)+1).padStart(4,'0');
+}
+
+function toggleTeamName(){
+  const team=$('ordertype').value==='team';
+  $('teamnamebox').style.display=team?'':'none';
+}
+
+function newBill(type){
+  resetAttachmentDraft();
+  currentType=type;
+  editId=null;
+  $('editortitle').textContent=(type==='order'?'🧾 Customer Order':'⚡ Direct Sale')+' — '+nextNo(type);
+  ['customer','mobile','deliverydate','email','remarks','receiver','receiverphone','address','city','district','pincode','landmark','editorrack'].forEach(id=>$(id).value='');
+  $('state').value='Tamil Nadu';
+  $('ordertype').value='team';
+  $('teamname').value='';
+  $('ordertypepanel').style.display=type==='order'?'':'none';
+  toggleTeamName();
+  $('billgst').value='5';
+  $('redeem').value=0;
+  $('discount').value=0;
+  $('customerhistory').textContent='';
+  $('customer').dataset.autofilled='no';
+  lastAutoPhone='';
+  $('phonehint').textContent='Enter existing mobile number to fill customer name automatically.';
+  $('takenby').value='';
+  $('deliveredby').value='';
+  $('billdate').value=new Date().toLocaleDateString('en-CA');
+  $('status').value='Pending Bills';
+  $('received').value='0';
+  $('paymode').value='Cash';
+  $('itemrows').innerHTML='';
+  addItem();
+  $('status').parentElement.style.display=type==='direct'?'none':'';
+  $('deliveryfield').style.display=type==='direct'?'none':'';
+  $('extraoptions').open=false;
+  $('couriertoggle').checked=false;
+  $('courierfields').style.display='none';
+  $('rewardpanel').style.display=type==='direct'?'none':'';
+  show('editor');
+  if($('tab'+type))$('tab'+type).classList.add('active');
+  calculate();
+}
+
+function renumberItemRows(){
+  Array.from($('itemrows').rows).forEach((row,index)=>{
+    row.cells[0].textContent=String(index+1);
+  });
+}
+
+function addItem(item={}){
+  let tr=document.createElement('tr');
+  tr.innerHTML='<td></td><td><input class="desc" placeholder="Product Name" value="'+esc(item.desc||'')+'"></td><td><input class="qty" type="number" min="0" value="'+(item.qty??1)+'"></td><td><input class="rate" type="number" min="0" value="'+(item.rate??0)+'"></td><td class="line-amount"></td><td><button class="danger" type="button">×</button></td>';
+  tr.querySelector('button').onclick=()=>{tr.remove();renumberItemRows();calculate()};
+  tr.querySelectorAll('input').forEach(i=>i.addEventListener('input',calculate));
+  $('itemrows').appendChild(tr);
+  renumberItemRows();
+  calculate();
+}
+
+function getItems(){
+  const gstRate=Number($('billgst')?.value||0);
+  return [...$('itemrows').children].map(tr=>({
+    desc:tr.querySelector('.desc').value,
+    qty:+tr.querySelector('.qty').value||0,
+    rate:+tr.querySelector('.rate').value||0,
+    gst:gstRate
+  }));
+}
+
+function amounts(items,overrideGst=null){
+  let subtotal=0,tax=0;
+  items.forEach(i=>{
+    let base=i.qty*i.rate;
+    let rate=overrideGst!==null?Number(overrideGst):(Number(i.gst)||0);
+    subtotal+=base;
+    tax+=base-(base/(1+rate/100));
+  });
+  return {subtotal:subtotal-tax,tax,total:subtotal};
+}
+
+function calculate(){
+  const items=getItems();
+  items.forEach((item,index)=>{
+    $('itemrows').rows[index].querySelector('.line-amount').textContent=money(item.qty*item.rate);
+  });
+  const gstRate=Number($('billgst').value||0);
+  const a=amounts(items,gstRate);
+  const existing=bills.find(b=>b.id===editId);
+  const received=(existing?paid(existing):0)+(+$('received').value||0);
+  let redemption=validRedeem(a.total);
+  a.total=Math.max(0,a.total-redemption-(Math.max(0,+$('discount').value||0)));
+  if(currentType==='order')$('coininfo').textContent='Available: '+availableCoins($('mobile').value,editId)+' Coins | Earn after full payment: '+Math.floor(a.total/100);
+  $('billtotal').textContent='Taxable Value: '+money(a.subtotal)+'  |  GST ('+gstRate+'%): '+money(a.tax)+'  |  Grand Total: '+money(a.total)+'  |  Balance: '+money(Math.max(0,a.total-received));
+}
+
+function formBill(){
+  const gstRate=Number($('billgst').value||0);
+  let items=getItems(),a=amounts(items,gstRate),paidAmt=+$('received').value||0,redemption=validRedeem(a.total);
+  a.total=Math.max(0,a.total-redemption-(Math.max(0,+$('discount').value||0)));
+  const statusVal=currentType==='direct'?'Direct Sale':$('status').value;
+  let rackVal=currentType==='order'?$('editorrack').value.trim().toUpperCase():'';
+  if(statusVal==='Delivered')rackVal='';
+  return {
+    discount:Math.max(0,+$('discount').value||0),
+    id:editId||crypto.randomUUID(),
+    no:editId?bills.find(x=>x.id===editId).no:nextNo(currentType),
+    type:currentType,
+    gstRate,
+    rackNo:rackVal,
+    orderCategory:currentType==='order'?$('ordertype').value:null,
+    teamName:currentType==='order'&&$('ordertype').value==='team'?$('teamname').value.trim():'',
+    customer:$('customer').value.trim()||'Walk-in Customer',
+    mobile:$('mobile').value,
+    receiver:$('receiver').value,
+    receiverphone:$('receiverphone').value,
+    address:$('address').value,
+    city:$('city').value,
+    district:$('district').value,
+    state:$('state').value,
+    pincode:$('pincode').value,
+    landmark:$('landmark').value,
+    email:$('email').value,
+    takenby:$('takenby').value,
+    deliveredby:$('deliveredby').value,
+    redeemed:currentType==='order'?redemption:0,
+    date:$('billdate').value,
+    delivery:currentType==='direct'?$('billdate').value:$('deliverydate').value,
+    status:statusVal,
+    paymode:$('paymode').value,
+    remarks:$('remarks').value,
+    items,
+    ...a,
+    payments:editId?[...bills.find(x=>x.id===editId).payments]:[],
+    stages:editId?[...(bills.find(x=>x.id===editId).stages||[])]:[],
+    newPaid:paidAmt
+  };
+}
+
+async function saveBill(){
+  let b=formBill();
+  if(!b.items.length||b.items.every(i=>!i.desc.trim()))return alert('Enter at least one product name');
+  if(b.type==='order'&&b.redeemed>availableCoins(b.mobile,b.id))return alert('Not enough reward coins');
+  if(b.newPaid<0||b.newPaid>b.total+0.001)return alert('Invalid amount received');
+  let prior=b.payments.reduce((s,p)=>s+p.amount,0);
+  if(prior+b.newPaid>b.total+0.001)return alert('Payment exceeds total');
+  if(b.newPaid>0)b.payments.push({amount:b.newPaid,date:new Date().toISOString(),mode:b.paymode});
+  delete b.newPaid;
+  let i=bills.findIndex(x=>x.id===b.id);
+  if(i>=0){
+    if(b.status==='Delivered'){
+      b.lastRackNo=bills[i].rackNo||bills[i].lastRackNo||'';
+      b.rackNo='';
+    }else if(!b.rackNo&&bills[i].rackNo){
+      b.rackNo=bills[i].rackNo;
+    }
+    bills[i]=b;
+  }else{
+    bills.push(b);
+  }
+  persist();
+  try{await commitAttachments(b.id)}catch(e){alert('Bill saved, but attachments could not be saved: '+e.message);return}
+  show('dashboard');
+  printInvoice(b);
+}
+
+function paid(b){return (b.payments||[]).reduce((s,p)=>s+p.amount,0)}
+function balance(b){return Math.max(0,b.total-paid(b))}
+let skippedPending=new Set();
+function resetSkipped(){skippedPending.clear();renderDashboard()}
+function skipPending(id){skippedPending.add(id);renderDashboard()}
+function searchBill(b,q){return [b.no,b.customer,b.mobile,b.teamName,b.orderCategory,b.rackNo,b.id].some(v=>String(v??'').toLowerCase().includes(q))}
+
+function latestProcess(b){
+  if(b.status==='Delivered')return 'Delivered';
+  if(b.status==='Courier / Bus')return 'Courier / Bus';
+  if(b.status==='Ready in Rack')return b.rackNo?'Ready in Rack ('+b.rackNo+')':'Ready in Rack';
+  let steps=Array.isArray(b.stages)?b.stages:[];
+  let active=steps.find(st=>!st.done&&String(st.name||'').trim());
+  if(active)return String(active.name)+' — In Progress';
+  let done=[...steps].reverse().find(st=>st.done&&String(st.name||'').trim());
+  if(done)return String(done.name)+' — Completed';
+  return b.status||'Order Received';
+}
+
+/* WEEKLY SALES (MONDAY TO SATURDAY) */
+function renderWeeklySales(){
+  const now=new Date();
+  const dayOfWeek=now.getDay(); // 0=Sun, 1=Mon...
+  const diffToMon=dayOfWeek===0?-6:1-dayOfWeek;
+  const monday=new Date(now);
+  monday.setDate(now.getDate()+diffToMon);
+  const todayStr=now.toLocaleDateString('en-CA');
+  const dayNames=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  let html='',startLabel='',endLabel='';
+
+  for(let i=0;i<6;i++){
+    const d=new Date(monday);
+    d.setDate(monday.getDate()+i);
+    const iso=d.toLocaleDateString('en-CA');
+    const disp=d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'});
+    if(i===0)startLabel=disp;
+    if(i===5)endLabel=disp;
+    const dayBills=bills.filter(b=>b.date===iso);
+    const totalSales=dayBills.reduce((s,b)=>s+Number(b.total||0),0);
+    const isToday=iso===todayStr;
+    html+='<div class="day-card'+(isToday?' today':'')+'">'+
+      '<div class="day-name">'+dayNames[i]+'</div>'+
+      '<div class="day-date">'+disp+(isToday?' • TODAY':'')+'</div>'+
+      '<div class="day-amt">'+money(totalSales)+'</div>'+
+      '<div class="day-cnt">'+dayBills.length+' Bill'+(dayBills.length===1?'':'s')+'</div>'+
+    '</div>';
+  }
+  $('weeklysales').innerHTML=html;
+  $('weekrange').textContent=startLabel+' – '+endLabel;
+}
+
+/* RACK SYSTEM ON DASHBOARD */
+function renderRackBoard(){
+  const activeOrders=bills.filter(b=>b.type==='order'&&b.status!=='Delivered').reverse();
+  $('activeordercount').textContent=activeOrders.length+' Active Orders';
+  if(!activeOrders.length){
+    $('rackboard').innerHTML='<p class="muted">No active customer orders right now.</p>';
+    return;
+  }
+  $('rackboard').innerHTML=activeOrders.map(b=>{
+    const hasRack=Boolean(b.rackNo);
+    return '<div class="rack-card'+(hasRack?' has-rack':'')+'">'+
+      '<div>'+
+        '<div style="display:flex;justify-content:space-between;align-items:center">'+
+          '<b>'+esc(b.no)+'</b>'+
+          '<span class="pill">'+esc(b.status)+'</span>'+
+        '</div>'+
+        '<div style="font-size:15px;font-weight:700;margin-top:4px">'+esc(b.customer)+'</div>'+
+        '<div class="muted">'+esc(b.mobile||'No Phone')+(b.teamName?' • '+esc(b.teamName):'')+'</div>'+
+      '</div>'+
+      (hasRack
+        ?'<div class="rack-card-number" onclick="assignRack(\''+b.id+'\',true)" title="Click to change Rack Number">RACK: '+esc(b.rackNo)+'</div>'
+        :'<button type="button" class="rack-assign-btn" onclick="assignRack(\''+b.id+'\',true)">+ Assign Rack No</button>'
+      )+
+      '<div style="display:flex;gap:6px">'+
+        '<button type="button" class="secondary" style="flex:1;padding:7px" onclick="printBill(\''+b.id+'\')">Preview</button>'+
+        '<button type="button" style="flex:1;padding:7px;background:#10b981" onclick="markRackDelivered(\''+b.id+'\')">✓ Deliver</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function rackQuickResults(q){
+  let box=$('rackquickresults');if(!box)return;
+  if(!q){box.innerHTML='';return}
+  let found=bills.filter(b=>searchBill(b,q)).reverse();
+  if(!found.length){box.innerHTML='<div class="rack-result">No matching order found.</div>';return}
+  box.innerHTML='<h3>Search Lookup ('+found.length+')</h3>'+found.slice(0,20).map(b=>{
+    let rackReady=b.type==='order'&&b.status!=='Delivered'&&b.rackNo;
+    let isDelivered=b.status==='Delivered';
+    return '<div class="rack-result"><div><b>'+esc(b.customer||'Customer')+'</b> · '+esc(b.no)+' · '+esc(b.mobile||'')+'</div>'+
+    (rackReady?'<div class="muted">ASSIGNED RACK</div><div class="rack-hero">'+esc(b.rackNo)+'</div>':
+    '<div class="rack-hero" style="font-size:clamp(18px,4vw,26px)">'+esc(latestProcess(b))+'</div>')+
+    (b.type==='order'&&!isDelivered?'<div class="actions"><label>Rack Number <input id="rackinput_'+b.id+'" placeholder="e.g. R-24" value="'+esc(b.rackNo||'')+'" maxlength="24"></label><button onclick="assignRack(\''+b.id+'\')">Save Rack</button><button class="secondary" onclick="markRackDelivered(\''+b.id+'\')">Mark Delivered</button></div>':'')+'</div>';
+  }).join('');
+}
+
+function assignRack(id,askForNumber=false){
+  const b=bills.find(x=>x.id===id);
+  if(!b||b.type!=='order'||b.status==='Delivered')return;
+  const input=askForNumber?prompt('Enter Rack Number for '+b.no+' ('+b.customer+'):',b.rackNo||''):$('rackinput_'+id)?.value;
+  if(input===null)return;
+  const value=String(input||'').trim().toUpperCase();
+  if(!value||value.length>24)return alert('Enter a valid rack number.');
+  b.rackNo=value;
+  if(b.status==='Pending Bills'||b.status==='Packing Completed')b.status='Ready in Rack';
+  persist();
+  renderDashboard();
+  renderHistory();
+  renderCredit();
+}
+
+function markRackDelivered(id){
+  let b=bills.find(x=>x.id===id);
+  if(!b||!confirm('Mark '+b.no+' as Delivered? Rack number will be automatically removed.'))return;
+  b.lastRackNo=b.rackNo||b.lastRackNo||'';
+  b.rackNo=''; // Automatic delete on delivery
+  b.status='Delivered';
+  persist();
+  renderDashboard();
+  renderHistory();
+  renderCredit();
+}
+
+function renderDashboard(){
+  renderWeeklySales();
+  renderRackBoard();
+  let orders=bills.filter(b=>b.type==='order'),direct=bills.filter(b=>b.type==='direct');
+  $('stats').innerHTML=[
+    ['📦 Order Sales',orders.reduce((s,b)=>s+b.total,0)],
+    ['⚡ Direct Sales',direct.reduce((s,b)=>s+b.total,0)],
+    ['💰 Total Collection',bills.reduce((s,b)=>s+paid(b),0)],
+    ['💳 Credit Balance',bills.reduce((s,b)=>s+balance(b),0)]
+  ].map(([k,v])=>'<div class="stat">'+k+'<b>'+money(v)+'</b></div>').join('');
+
+  let pending=bills.filter(b=>b.type==='order'&&b.status!=='Delivered').reverse();
+  $('pendingcount').textContent=pending.length+' active';
+  let q=$('dashsearch').value.trim().toLowerCase();
+  rackQuickResults(q);
+  $('dashresults').innerHTML=q?'<h3>Search Results ('+bills.filter(b=>searchBill(b,q)).length+')</h3>'+tableBills(bills.filter(b=>searchBill(b,q)).reverse()):'';
+  let visible=pending.filter(b=>!skippedPending.has(b.id)).slice(0,10);
+  $('pendingrows').innerHTML=visible.length?'<table><thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Phone</th><th>Total</th><th>Balance</th><th>Rack</th><th>Status</th><th>Action</th></tr></thead><tbody>'+visible.map(b=>'<tr><td><b>'+esc(b.no)+'</b></td><td>'+esc(b.date)+'</td><td>'+esc(b.customer)+'</td><td>'+esc(b.mobile)+'</td><td>'+money(b.total)+'</td><td>'+money(balance(b))+'</td><td>'+rackBadgeHtml(b)+'</td><td>'+statusSelect(b)+'</td><td><button onclick="printBill(\''+b.id+'\')">Preview</button> <button class="secondary" onclick="sendWhatsApp(\''+b.id+'\')">WhatsApp</button> <button class="secondary" onclick="editBill(\''+b.id+'\')">Edit</button> <button class="secondary" onclick="skipPending(\''+b.id+'\')">Skip</button></td></tr>').join('')+'</tbody></table>':'<p class="muted">No active pending orders.</p>';
+  $('recent').innerHTML=bills.slice(-6).reverse().map(b=>'<p><b>'+esc(b.no)+'</b> — '+esc(b.customer)+' — '+money(b.total)+' — <span class="pill">'+esc(b.status)+'</span>'+(b.rackNo?' <span class="rack-badge" style="font-size:13px;padding:3px 8px">'+esc(b.rackNo)+'</span>':'')+'</p>').join('')||'<p>No bills yet.</p>';
+}
+
+function rackBadgeHtml(b){
+  if(b.type==='direct'||b.status==='Delivered')return '<span class="muted">—</span>';
+  return b.rackNo
+    ?'<span class="rack-badge" onclick="assignRack(\''+b.id+'\',true)" title="Click to edit Rack">'+esc(b.rackNo)+'</span>'
+    :'<button type="button" class="rack-assign-btn" onclick="assignRack(\''+b.id+'\',true)">+ Rack</button>';
+}
+
+const statuses=['Pending Bills','Packing Completed','Ready in Rack','Courier / Bus','Delivered'];
+function statusSelect(b){
+  return b.type==='direct'?'<span class="pill">Direct Sale</span>':'<select aria-label="Move status" onchange="moveStatus(\''+b.id+'\',this.value)">'+statuses.map(s=>'<option '+(b.status===s?'selected':'')+'>'+s+'</option>').join('')+'</select>';
+}
+
+function tableBills(arr,numberRows=false){
+  return '<table><thead><tr>'+(numberRows?'<th scope="col">S.No</th>':'')+'<th>Bill</th><th>Date</th><th>Customer</th><th>Type</th><th>Rack</th><th>Total</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+arr.map((b,index)=>'<tr>'+(numberRows?'<td>'+(index+1)+'</td>':'')+'<td><b>'+esc(b.no)+'</b></td><td>'+esc(b.date)+'</td><td>'+esc(b.customer)+'</td><td>'+esc(b.type==='
