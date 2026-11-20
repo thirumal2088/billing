@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rainbow Sports Billing</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{
+  font-family:'Segoe UI',Arial,sans-serif;
+  color:#132c4c;
+  background:linear-gradient(135deg,#fff5f5 0%,#fffbeb 25%,#f0fdf4 50%,#eff6ff 75%,#faf5ff 100%);
+  min-height:100vh;
+}
+*{box-sizing:border-box}
+body{margin:0;background:transparent}
+
+/* Vibrant Rainbow Header */
+header{
+  padding:20px 4%;
+  background:linear-gradient(115deg,#ff4b4b 0%,#ff9800 22%,#eab308 42%,#10b981 62%,#3b82f6 82%,#8b5cf6 100%);
+  color:white;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 4px 18px rgba(139,92,246,0.25);
+}
+header h1{margin:0;font-size:26px;text-shadow:0 2px 5px rgba(0,0,0,0.3);letter-spacing:0.5px}
+header small{font-weight:bold;display:block;margin-top:3px;opacity:0.95}
+
+main{max-width:1250px;margin:18px auto;padding:0 14px}
+.tabs,.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+
+/* Colorful Buttons */
+button{background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;border:0;border-radius:9px;padding:10px 15px;cursor:pointer;font-weight:700;transition:0.18s;box-shadow:0 2px 6px rgba(37,99,235,0.2)}
+button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+button.secondary{background:#ffffff;color:#1e3a8a;border:1px solid #cbd5e1;box-shadow:none}
+button.secondary:hover{background:#f1f5f9}
+button.danger{background:linear-gradient(135deg,#ef4444,#dc2626)}
+button.new-inv-btn{background:linear-gradient(135deg,#ec4899,#f97316,#eab308);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.25);font-size:16px;padding:13px 22px;box-shadow:0 5px 15px rgba(249,115,22,0.35)}
+button.new-direct-btn{background:linear-gradient(135deg,#10b981,#0284c7);font-size:15px;padding:13px 20px;box-shadow:0 5px 15px rgba(16,185,129,0.3)}
+
+.tabs button{background:#ffffff;color:#334155;border:1px solid #e2e8f0;box-shadow:0 2px 5px rgba(0,0,0,0.04)}
+.tabs button.active{background:linear-gradient(110deg,#f43f5e,#f59e0b,#10b981,#3b82f6,#8b5cf6);color:white;border:0;box-shadow:0 4px 12px rgba(99,102,241,0.3)}
+
+/* Rainbow Top-Border Panels */
+.panel{
+  background:rgba(255,255,255,0.96);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:18px;
+  box-shadow:0 6px 20px rgba(30,41,59,0.06);
+  border-top:4px solid transparent;
+  border-image:linear-gradient(90deg,#ff4b4b,#ff9800,#eab308,#10b981,#3b82f6,#8b5cf6) 1;
+}
+
+.page{display:none}
+.page.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+
+/* Multi-color Stat Cards */
+.stat{border-radius:12px;padding:15px;color:#0f172a;border:1px solid #e2e8f0}
+.stat:nth-child(1){background:linear-gradient(135deg,#fff1f2,#ffe4e6);border-color:#fecdd3}
+.stat:nth-child(2){background:linear-gradient(135deg,#fefce8,#fef08a);border-color:#fde047}
+.stat:nth-child(3){background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-color:#a7f3d0}
+.stat:nth-child(4){background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#bfdbfe}
+.stat b{display:block;font-size:23px;margin-top:6px;color:#0f172a}
+
+/* Dashboard Hero & Rainbow Weekly 6-Day (Mon-Sat) Sales Grid */
+.dash-hero{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:2px dashed #e2e8f0}
+.week-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:12px}
+.day-card{border-radius:12px;padding:13px 10px;text-align:center;border:1px solid rgba(0,0,0,0.08);transition:0.2s}
+.day-card:nth-child(1){background:linear-gradient(160deg,#fee2e2,#fecaca)}
+.day-card:nth-child(2){background:linear-gradient(160deg,#ffedd5,#fed7aa)}
+.day-card:nth-child(3){background:linear-gradient(160deg,#fef9c3,#fef08a)}
+.day-card:nth-child(4){background:linear-gradient(160deg,#dcfce7,#bbf7d0)}
+.day-card:nth-child(5){background:linear-gradient(160deg,#dbeafe,#bfdbfe)}
+.day-card:nth-child(6){background:linear-gradient(160deg,#f3e8ff,#e9d5ff)}
+
+.day-card.today{outline:3px solid #1e293b;transform:translateY(-3px);box-shadow:0 8px 18px rgba(15,23,42,0.15)}
+.day-card .day-name{font-size:13px;font-weight:900;color:#1e293b;text-transform:uppercase;letter-spacing:0.6px}
+.day-card .day-date{font-size:11px;color:#475569;margin:2px 0 6px;font-weight:600}
+.day-card .day-amt{font-size:18px;font-weight:900;color:#0f172a;margin:4px 0}
+.day-card .day-cnt{font-size:11px;color:#fff;font-weight:800;background:#1e293b;padding:3px 9px;border-radius:12px;display:inline-block}
+
+label{display:block;font-size:13px;font-weight:bold;margin:8px 0 4px;color:#1e293b}
+input,select,textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.15)}
+table{width:100%;border-collapse:collapse;min-width:540px}
+th,td{padding:10px;border-bottom:1px solid #e2e8f0;text-align:left}
+th{background:linear-gradient(90deg,#eff6ff,#f5f3ff);color:#1e1b4b;font-weight:800}
+.scroll{overflow:auto}
+.muted{color:#64748b;font-size:13px}
+.pill{padding:4px 10px;background:linear-gradient(90deg,#fef3c7,#fce7f3);color:#9d174d;font-weight:bold;border-radius:20px;font-size:12px}
+.hidden{display:none!important}
+#printarea{display:none}
+#fixedqr{width:140px;height:140px;object-fit:contain}
+#dynamicqr{width:140px;height:140px;display:flex;align-items:center;justify-content:center}
+#dynamicqr img{max-width:140px}
+.qrrow{display:flex;gap:25px;flex-wrap:wrap;align-items:center}
+.qrbox{padding:12px;border:2px dashed #a5b4fc;border-radius:12px;text-align:center;background:#f8fafc}
+
+/* Bold Colorful Rack Badge & Cards */
+.rack-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#f59e0b,#ef4444);
+  color:#ffffff;font-size:18px;font-weight:900;
+  padding:6px 13px;border-radius:9px;letter-spacing:0.6px;
+  cursor:pointer;border:2px solid #fff;
+  box-shadow:0 3px 8px rgba(239,68,68,0.35);
+}
+.rack-badge:hover{filter:brightness(1.1);transform:scale(1.03)}
+.rack-assign-btn{background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;font-weight:
