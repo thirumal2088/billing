@@ -1,6 +1,6 @@
 Rainbow Sports Billing — Invoice Preview & WhatsApp update
 
-Deploy the ZIP directly to Netlify (index.html at root).
+For manual deploy, extract the ZIP and upload the folder containing index.html and assets to your existing Netlify site. For a Git-connected site, keep index.html and netlify.toml at the repository root, leave the build command blank, and use "." as the publish directory.
 
 New:
 - Preview Bill opens a full invoice overlay before printing.
