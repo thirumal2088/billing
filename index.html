@@ -12,7 +12,7 @@ function startInvoicePrint(){
  if(!Number.isFinite(width)||width<40||width>210)return alert('Enter width from 40 to 210 mm');
  const thermal=preset!=='a4';
  const size=preset==='a4'?'A4 portrait':width+'mm auto';
- const css='@media print{@page{size:'+size+';margin:'+(thermal?'2mm':'7mm')+'}#invoiceprint{font-size:'+(thermal?'9px':'12px')+'!important;padding:0!important}#invoiceprint .invoicehead{display:block;text-align:center;border-width:2px!important}#invoiceprint .invoicehead h1{font-size:'+(thermal?'15px':'24px')+'!important}#invoiceprint .invoicegrid{display:block!important}#invoiceprint .invoicegrid>div{margin-bottom:5px}#invoiceprint .invtable th,#invoiceprint .invtable td{padding:'+(thermal?'2px':'6px')+'!important;font-size:'+(thermal?'8px':'11px')+'!important}#invoiceprint .invfooter{display:'+(thermal?'block':'flex')+'!important}#invoiceprint .invfooter img{width:'+(thermal?'60px':'95px')+'!important;height:auto!important}#invoiceprint .totals{max-width:100%!important}#invoiceprint .totals div{padding:3px!important}'+(thermal?'#invoiceprint .invoicehead small,#invoiceprint .invfooter .qrsmall{display:none!important}':'')+'}';
+ const css='@media print{@page{size:'+size+';margin:'+(thermal?'2mm':'12mm')+'}#invoiceprint{font-size:'+(thermal?'9px':'12px')+'!important;padding:0!important}#invoiceprint .invoicehead{display:block;text-align:center;border-width:2px!important}#invoiceprint .invoicehead h1{font-size:'+(thermal?'15px':'24px')+'!important}#invoiceprint .invoicegrid{display:block!important}#invoiceprint .invoicegrid>div{margin-bottom:5px}#invoiceprint .invtable th,#invoiceprint .invtable td{padding:'+(thermal?'2px':'6px')+'!important;font-size:'+(thermal?'8px':'11px')+'!important}#invoiceprint .invfooter{display:'+(thermal?'block':'flex')+'!important}#invoiceprint .invfooter img{width:'+(thermal?'60px':'95px')+'!important;height:auto!important}#invoiceprint .totals{max-width:100%!important}#invoiceprint .totals div{padding:3px!important}'+(thermal?'#invoiceprint .invoicehead small,#invoiceprint .invfooter .qrsmall{display:none!important}':'')+'}';
  document.getElementById('dynamicprintstyle').textContent=css;
  closePrintDialog();closeInvoicePreview();setTimeout(()=>window.print(),120)
 }
@@ -88,6 +88,36 @@ function startInvoicePrint(){
 #printdialog.hidden{display:none!important}
 @media print{#previewdialog{display:none!important}#printdialog{display:none!important}#invoiceprint{width:100%;min-height:0!important}#invoiceprint table{min-width:0!important;table-layout:fixed}#invoiceprint th,#invoiceprint td{overflow-wrap:anywhere}#invoiceprint img{max-width:100%}}
 @media screen{#printarea{display:none}}
+@media screen {
+  #previewpaper {
+    width: 100%;
+    margin-inline: auto;
+    padding: clamp(12px, 3vw, 28px);
+    overflow-wrap: anywhere;
+  }
+  #previewpaper .invoicehead,
+  #previewpaper .invfooter {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  #previewpaper .invtable {
+    min-width: 0;
+  }
+  #previewpaper .invtable th,
+  #previewpaper .invtable td {
+    padding-inline: clamp(4px, 1vw, 9px);
+  }
+}
+@media screen and (max-width: 520px) {
+  #previewpaper .invoicehead {
+    justify-content: center;
+    text-align: center;
+  }
+  #previewpaper .invtable {
+    font-size: 12px;
+  }
+}
+
 button.save-bill{background:#16743b;font-size:17px;padding:14px 24px;min-height:48px}
 .order-gst{max-width:200px;margin-top:10px}
 .bill-items{min-width:490px}
@@ -311,7 +341,7 @@ function startInvoicePrint(){
  if(!Number.isFinite(width)||width<40||width>210)return alert('Enter width from 40 to 210 mm');
  const thermal=preset!=='a4';
  const size=preset==='a4'?'A4 portrait':width+'mm auto';
- const css='@media print{@page{size:'+size+';margin:'+(thermal?'2mm':'7mm')+'}#invoiceprint{font-size:'+(thermal?'9px':'12px')+'!important;padding:0!important}#invoiceprint .invoicehead{display:block;text-align:center;border-width:2px!important}#invoiceprint .invoicehead h1{font-size:'+(thermal?'15px':'24px')+'!important}#invoiceprint .invoicegrid{display:block!important}#invoiceprint .invoicegrid>div{margin-bottom:5px}#invoiceprint .invtable th,#invoiceprint .invtable td{padding:'+(thermal?'2px':'6px')+'!important;font-size:'+(thermal?'8px':'11px')+'!important}#invoiceprint .invfooter{display:'+(thermal?'block':'flex')+'!important}#invoiceprint .invfooter img{width:'+(thermal?'60px':'95px')+'!important;height:auto!important}#invoiceprint .totals{max-width:100%!important}#invoiceprint .totals div{padding:3px!important}'+(thermal?'#invoiceprint .invoicehead small,#invoiceprint .invfooter .qrsmall{display:none!important}':'')+'}';
+ const css='@media print{@page{size:'+size+';margin:'+(thermal?'2mm':'12mm')+'}#invoiceprint{font-size:'+(thermal?'9px':'12px')+'!important;padding:0!important}#invoiceprint .invoicehead{display:block;text-align:center;border-width:2px!important}#invoiceprint .invoicehead h1{font-size:'+(thermal?'15px':'24px')+'!important}#invoiceprint .invoicegrid{display:block!important}#invoiceprint .invoicegrid>div{margin-bottom:5px}#invoiceprint .invtable th,#invoiceprint .invtable td{padding:'+(thermal?'2px':'6px')+'!important;font-size:'+(thermal?'8px':'11px')+'!important}#invoiceprint .invfooter{display:'+(thermal?'block':'flex')+'!important}#invoiceprint .invfooter img{width:'+(thermal?'60px':'95px')+'!important;height:auto!important}#invoiceprint .totals{max-width:100%!important}#invoiceprint .totals div{padding:3px!important}'+(thermal?'#invoiceprint .invoicehead small,#invoiceprint .invfooter .qrsmall{display:none!important}':'')+'}';
  document.getElementById('dynamicprintstyle').textContent=css;
  closePrintDialog();closeInvoicePreview();setTimeout(()=>window.print(),120)
 }
