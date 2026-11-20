@@ -1,0 +1,406 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=a4c45415-22a1-4cf0-8563-0680f62c8124
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. --><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rainbow Sports Billing</title><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+let printIsCourier=false;
+function openPrintDialog(){document.getElementById('printdialog').classList.remove('hidden');updatePrintWidth()}
+function closePrintDialog(){document.getElementById('printdialog').classList.add('hidden')}
+function updatePrintWidth(){document.getElementById('customwidthbox').classList.toggle('hidden',document.getElementById('paperpreset').value!=='custom')}
+function startInvoicePrint(){
+ const preset=document.getElementById('paperpreset').value;
+ let width=preset==='a4'?210:Number(preset==='custom'?document.getElementById('customwidth').value:preset);
+ if(!Number.isFinite(width)||width<40||width>210)return alert('Enter width from 40 to 210 mm');
+ const thermal=preset!=='a4';
+ const size=preset==='a4'?'A4 portrait':width+'mm auto';
+ const css='@media print{@page{size:'+size+';margin:'+(thermal?'2mm':'12mm')+'}#invoiceprint{font-size:'+(thermal?'9px':'12px')+'!important;padding:0!important}#invoiceprint .invoicehead{display:block;text-align:center;border-width:2px!important}#invoiceprint .invoicehead h1{font-size:'+(thermal?'15px':'24px')+'!important}#invoiceprint .invoicegrid{display:block!important}#invoiceprint .invoicegrid>div{margin-bottom:5px}#invoiceprint .invtable th,#invoiceprint .invtable td{padding:'+(thermal?'2px':'6px')+'!important;font-size:'+(thermal?'8px':'11px')+'!important}#invoiceprint .invfooter{display:'+(thermal?'block':'flex')+'!important}#invoiceprint .invfooter img{width:'+(thermal?'60px':'95px')+'!important;height:auto!important}#invoiceprint .totals{max-width:100%!important}#invoiceprint .totals div{padding:3px!important}'+(thermal?'#invoiceprint .invoicehead small,#invoiceprint .invfooter .qrsmall{display:none!important}':'')+'}';
+ document.getElementById('dynamicprintstyle').textContent=css;
+ closePrintDialog();closeInvoicePreview();setTimeout(()=>window.print(),120)
+}
+</script><style>
+:root{font-family:Arial,sans-serif;color:#132c4c;background:#f1f5fb}*{box-sizing:border-box}body{margin:0}header{padding:20px 4%;background:linear-gradient(110deg,#fc6b50,#ffc638,#25aa8a,#276ac4,#8139a7);color:white}header h1{margin:0;font-size:27px;text-shadow:0 1px 3px #234}header small{font-weight:bold}main{max-width:1200px;margin:20px auto;padding:0 14px}.tabs,.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}button{background:#16559c;color:#fff;border:0;border-radius:8px;padding:11px 14px;cursor:pointer;font-weight:600}button:hover{filter:brightness(1.1)}button.secondary{background:#e6eef9;color:#12365d}button.danger{background:#b53645}.tabs button.active{background:#0e284b}.panel{background:white;border-radius:13px;padding:20px;margin-bottom:16px;box-shadow:0 3px 15px #dce4ef}.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.stat{border:1px solid #dce6f2;border-radius:10px;padding:16px}.stat b{display:block;font-size:23px;margin-top:8px}label{display:block;font-size:13px;font-weight:bold;margin:8px 0 4px}input,select,textarea{width:100%;padding:10px;border:1px solid #bfcbdc;border-radius:7px;font:inherit}table{width:100%;border-collapse:collapse;min-width:620px}th,td{padding:9px;border-bottom:1px solid #e1e8f0;text-align:left}th{background:#e9f0fa}.scroll{overflow:auto}.muted{color:#63748b;font-size:13px}.pill{padding:4px 9px;background:#e5edf8;border-radius:20px;font-size:12px}.hidden{display:none!important}#printarea{display:none}#fixedqr{width:140px;height:140px;object-fit:contain}#dynamicqr{width:140px;height:140px;display:flex;align-items:center;justify-content:center}#dynamicqr img{max-width:140px}.qrrow{display:flex;gap:25px;flex-wrap:wrap;align-items:center}.qrbox{padding:10px;border:1px solid #ccd8e7;border-radius:9px;text-align:center}#invoiceprint{color:#0a2e5c;background:white;padding:14px;min-height:650px}.invoicehead{display:flex;justify-content:space-between;align-items:center;border-top:8px solid #ec6b42;border-bottom:5px solid #6d2b9c;padding:10px;gap:10px}.invoicehead h1{font-size:27px;margin:0}.gold{color:#b98a13}.invoicegrid{display:grid;grid-template-columns:1.3fr 1fr;gap:15px;margin:15px 0}.invtable th{background:#064078;color:white}.invtable td{height:32px}.invfooter{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;border-bottom:7px solid #2a87d5;padding-bottom:10px;margin-top:18px}.invfooter img{width:100px;height:100px;object-fit:contain}.invfooter .qrsmall{width:95px;height:95px}.totals{margin-left:auto;max-width:330px}.totals div{display:flex;justify-content:space-between;padding:6px;border-bottom:1px solid #ddd}.totals div:last-child{background:#dceefc;font-size:19px;font-weight:bold}.invsmall{font-size:12px}@media print{@page{size:auto;margin:5mm}header,main{display:none!important}#printarea{display:block!important}#invoiceprint{padding:0;min-height:0}body{background:white}*{print-color-adjust:exact;-webkit-print-color-adjust:exact}}@media(max-width:600px){.invoicehead h1{font-size:20px}.panel{padding:12px}}
+
+
+/* Responsive mobile workspace: desktop layout stays unchanged. */
+@media (max-width: 720px) {
+ html { -webkit-text-size-adjust:100%; }
+ body { overflow-x:hidden; font-size:15px; }
+ header { padding:13px 14px; }
+ header h1 { font-size:20px; line-height:1.25; }
+ header small { display:block; font-size:11px; margin-top:4px; }
+ main { margin:0 auto; padding:0 10px 88px; }
+ .tabs { position:sticky; top:0; z-index:40; display:flex; flex-wrap:nowrap; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:thin; margin:0 -10px 12px; padding:9px 10px; background:#fff; box-shadow:0 2px 9px #122b4722; gap:7px; -webkit-overflow-scrolling:touch; }
+ .tabs button { flex:0 0 auto; white-space:nowrap; min-height:44px; padding:10px 13px; font-size:13px; }
+ .panel { padding:14px 12px; margin-bottom:12px; border-radius:12px; box-shadow:0 2px 9px #dce4ef; }
+ .panel h2 { font-size:20px; margin-top:0; }
+ .panel h3 { font-size:17px; }
+ .grid { grid-template-columns: minmax(0,1fr); gap:10px; }
+ #stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+ .stat { padding:12px 9px; min-width:0; overflow-wrap:anywhere; font-size:12px; }
+ .stat b { font-size:19px; }
+ input,select,textarea { font-size:16px; min-height:44px; max-width:100%; }
+ button { min-height:43px; font-size:14px; touch-action:manipulation; }
+ .actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+ .actions button { width:100%; min-width:0; white-space:normal; }
+ .actions button:only-child { grid-column:1/-1; }
+ .scroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+ /* The item editor remains a scrollable grid so numeric input fields are never lost. */
+ #editor .scroll { border:1px solid #e2eaf4; border-radius:10px; }
+ #editor table { min-width:660px; }
+ #editor td input,#editor td select { min-width:74px; }
+ /* Read-only history tables become easy-to-tap stacked invoice cards. */
+ #pendingrows table,#dashresults table,#historyrows table,#creditrows table { display:block; min-width:0; width:100%; }
+ #pendingrows thead,#dashresults thead,#historyrows thead,#creditrows thead { display:none; }
+ #pendingrows tbody,#dashresults tbody,#historyrows tbody,#creditrows tbody { display:grid; gap:10px; }
+ #pendingrows tr,#dashresults tr,#historyrows tr,#creditrows tr { display:block; background:#f9fbff; border:1px solid #dce6f2; border-radius:11px; padding:9px 11px; }
+ #pendingrows td,#dashresults td,#historyrows td,#creditrows td { display:flex; align-items:center; justify-content:space-between; gap:10px; border:0; border-bottom:1px solid #edf1f7; padding:8px 0; min-width:0; overflow-wrap:anywhere; text-align:right; }
+ #pendingrows td:last-child,#dashresults td:last-child,#historyrows td:last-child,#creditrows td:last-child { border-bottom:0; display:flex; justify-content:flex-start; flex-wrap:wrap; gap:6px; }
+ #pendingrows td:before,#dashresults td:before,#historyrows td:before,#creditrows td:before { font-weight:700; color:#62738b; font-size:12px; text-align:left; flex:0 0 36%; }
+ #pendingrows td:nth-child(1):before {content:'Invoice';} #pendingrows td:nth-child(2):before {content:'Date';} #pendingrows td:nth-child(3):before {content:'Customer';} #pendingrows td:nth-child(4):before {content:'Phone';} #pendingrows td:nth-child(5):before {content:'Amount';} #pendingrows td:nth-child(6):before {content:'Balance';} #pendingrows td:nth-child(7):before {content:'Status';}
+ #historyrows td:nth-child(1):before,#dashresults td:nth-child(1):before,#creditrows td:nth-child(1):before {content:'Invoice';}
+ #historyrows td:nth-child(2):before,#dashresults td:nth-child(2):before,#creditrows td:nth-child(2):before {content:'Date';}
+ #historyrows td:nth-child(3):before,#dashresults td:nth-child(3):before,#creditrows td:nth-child(3):before {content:'Customer';}
+ #historyrows td:nth-child(4):before,#dashresults td:nth-child(4):before,#creditrows td:nth-child(4):before {content:'Type';}
+ #historyrows td:nth-child(5):before,#dashresults td:nth-child(5):before,#creditrows td:nth-child(5):before {content:'Total';}
+ #historyrows td:nth-child(6):before,#dashresults td:nth-child(6):before,#creditrows td:nth-child(6):before {content:'Balance';}
+ #historyrows td:nth-child(7):before,#dashresults td:nth-child(7):before,#creditrows td:nth-child(7):before {content:'Status';}
+ #pendingrows td:last-child:before,#dashresults td:last-child:before,#historyrows td:last-child:before,#creditrows td:last-child:before { content:'Actions'; flex:0 0 100%; }
+ #pendingrows td select,#dashresults td select,#historyrows td select,#creditrows td select { width:auto; flex:1; min-width:0; }
+ #pendingrows td button,#dashresults td button,#historyrows td button,#creditrows td button { flex:1 1 auto; padding:9px 10px; }
+ .stagebox { padding:10px; }
+ .stage-row { display:grid; grid-template-columns:38px minmax(0,1fr) 42px 42px 42px; gap:6px; padding:11px 8px; background:#f7faff; border:1px solid #e0e8f2; border-radius:10px; }
+ .stage-row input[type=checkbox] { width:24px; min-height:24px; align-self:center; justify-self:center; }
+ .stage-row input[type=text] { min-width:0; grid-column:2/-1; }
+ .stage-row .stage-note { grid-column:1/-1; min-width:0; }
+ .stage-row button { min-width:0; padding:7px; }
+ .stage-row button:nth-last-child(3) { grid-column:3; }
+ .stage-row button:nth-last-child(2) { grid-column:4; }
+ .stage-row button:last-child { grid-column:5; }
+ .stage-controls { display:grid; grid-template-columns:1fr 1fr; }
+ .stage-controls input { grid-column:1/-1; min-width:0; }
+ .qrrow { gap:12px; }
+ .qrbox { max-width:100%; }
+ .invoicehead { flex-wrap:wrap; }
+ .invoicegrid { grid-template-columns:1fr; }
+}
+@media (max-width:370px) { #stats { grid-template-columns:1fr 1fr; } .tabs button { font-size:12px; padding:9px 10px; } .actions {grid-template-columns:1fr;} }
+@media print { .tabs {position:static;} }
+</style><style id="rackquickcss">.rack-result{border:1px solid #d5e0ee;border-radius:12px;padding:14px;margin:12px 0;background:#f7faff}.rack-hero{font-size:clamp(30px,7vw,55px);font-weight:900;line-height:1.15;color:#133c73;margin:7px 0}.rack-result .actions{margin-top:10px}.rack-result .muted{font-size:13px}.rack-result button{margin:4px}.rack-tag{font-weight:700}.rack-result input{max-width:145px;display:inline-block}.rack-result .rack-line{display:flex;align-items:center;flex-wrap:wrap;gap:8px}</style><style>.stagebox{background:#f8fbff;border:1px solid #cbd8ea;border-radius:12px;padding:15px;margin:12px 0}.stage-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:9px 0}.stage-row input[type=text]{flex:1;min-width:125px}.stage-row .stage-note{flex:2;min-width:130px}.stage-row button{padding:8px}.stage-controls{display:flex;gap:8px;flex-wrap:wrap}.stagebox .muted{font-size:13px}</style><style id="dynamicprintstyle"></style><style>
+#printdialog.hidden{display:none!important}
+@media print{#previewdialog{display:none!important}#printdialog{display:none!important}#invoiceprint{width:100%;min-height:0!important}#invoiceprint table{min-width:0!important;table-layout:fixed}#invoiceprint th,#invoiceprint td{overflow-wrap:anywhere}#invoiceprint img{max-width:100%}}
+@media screen{#printarea{display:none}}
+@media screen {
+  #previewpaper {
+    width: 100%;
+    margin-inline: auto;
+    padding: clamp(12px, 3vw, 28px);
+    overflow-wrap: anywhere;
+  }
+  #previewpaper .invoicehead,
+  #previewpaper .invfooter {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  #previewpaper .invtable {
+    min-width: 0;
+  }
+  #previewpaper .invtable th,
+  #previewpaper .invtable td {
+    padding-inline: clamp(4px, 1vw, 9px);
+  }
+}
+@media screen and (max-width: 520px) {
+  #previewpaper .invoicehead {
+    justify-content: center;
+    text-align: center;
+  }
+  #previewpaper .invtable {
+    font-size: 12px;
+  }
+}
+
+button.save-bill{background:#16743b;font-size:17px;padding:14px 24px;min-height:48px}
+.order-gst{max-width:200px;margin-top:10px}
+.bill-items{min-width:490px}
+.bill-items th,.bill-items td{padding:5px}
+.bill-items th:not(:nth-child(2)){white-space:nowrap}
+.bill-items input,.bill-items select{padding:6px}
+.bill-items .qty{min-width:60px}
+.bill-items .rate{min-width:78px}
+.bill-items .desc{min-width:115px}
+.bill-items .line-amount{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+.bill-items button{padding:6px 10px}
+.bill-totals{padding:10px 12px;background:#eef4fc;border-radius:8px;font-weight:600}
+#previewrack h3{margin:0}
+#previewracknumber{display:block;margin-top:4px;font-size:clamp(28px,5vw,44px);font-weight:800;color:#124c33;overflow-wrap:anywhere}
+#previewrackinput{width:min(100%,175px)}
+</style></head><body><header><h1>🌈 RAINBOW SPORTS — BOMMIDI</h1><small>JUSTHUE® • Billing & Order Management</small></header><main><div class="tabs"><button onclick="show('dashboard')" id="tabdashboard">Dashboard</button><button onclick="newBill('order')" id="taborder">Order</button><button onclick="show('history')" id="tabhistory">Bill History</button><button onclick="show('production')" id="tabproduction">Production</button><button onclick="show('credit')" id="tabcredit">Credit List</button><button onclick="show('reports')" id="tabreports">Monthly Exports</button><button onclick="show('settings')" id="tabsettings">Settings / Backup</button></div>
+<section id="dashboard" class="page"><div class="panel"><h2>Dashboard</h2><div class="grid" id="stats"></div></div><div class="panel"><h3>Pending Bills <span id="pendingcount" class="pill"></span></h3><p class="muted">Dashboard-ல் அதிகபட்சம் 10 Pending Customer Orders. Skip என்பது இந்த பட்டியலில் மட்டும் தற்காலிகமாக மறைக்கும்; பில்லின் Status மாறாது.</p><div class="grid"><div><label>Quick Search — Phone / Invoice No / Bill No / Customer Name</label><input id="dashsearch" oninput="renderDashboard()" placeholder="Search any bill..." autocomplete="off"></div></div><div id="rackquickresults" aria-live="polite"></div><div id="dashresults" class="scroll"></div><div id="pendingrows" class="scroll"></div><div class="actions"><button class="secondary" onclick="resetSkipped()">Show Skipped Bills</button><button class="secondary" onclick="show('history')">View All Bill History</button></div></div><div class="panel"><h3>Recent Bills</h3><div id="recent"></div></div></section>
+<section id="editor" class="page"><div class="panel"><h2 id="editortitle">New Bill</h2><div class="grid"><div><label>1. Staff Name / Order Taken By *</label><select id="takenby"></select></div><div><label>2. Customer Name</label><input id="customer" placeholder="Customer Name"></div><div><label>3. Mobile Number — auto-fill Customer Name</label><input id="mobile" type="tel" inputmode="numeric" maxlength="15" autocomplete="off" placeholder="Enter customer phone number"><small id="phonehint" class="muted" aria-live="polite">Enter existing mobile number to fill customer name automatically.</small></div></div><div id="ordertypepanel" class="grid" style="margin-top:10px"><div><label>Order Type *</label><select id="ordertype" onchange="toggleTeamName()"><option value="team">Team Order</option><option value="single">Single Order</option></select></div><div id="teamnamebox"><label>Team Name (Optional)</label><input id="teamname" placeholder="Cricket Club / School / Team"></div></div><div class="order-gst"><label for="billgst">GST (Inclusive)</label><select id="billgst" onchange="calculate()"><option value="0">Non-GST</option><option value="5" selected>5%</option><option value="12">12%</option><option value="18">18%</option></select></div><div class="actions"><button class="secondary" onclick="viewCustomerBills()">Previous Bills</button></div><div id="customerhistory" class="muted"></div><h3>Items</h3><div class="scroll"><table class="bill-items"><thead><tr><th scope="col">S.No</th><th>Description</th><th>Qty</th><th>Rate ₹</th><th>Total ₹</th><th aria-label="Remove item"></th></tr></thead><tbody id="itemrows"></tbody></table></div><div class="actions"><button class="secondary" onclick="addItem()">+ Add Item</button></div><p id="billtotal" class="bill-totals"></p><input type="hidden" id="billdate"><details id="extraoptions"><summary style="cursor:pointer;font-weight:bold;padding:10px 0">Optional Details (Delivery / Courier / Email / Status)</summary><div class="grid"><div id="deliveryfield"><label>Expected Delivery Date (Optional)</label><input type="date" id="deliverydate"></div><div><label>Order / Delivery Status</label><select id="status"><option value="Pending Bills">Pending Bills</option><option value="Packing Completed">Packing Completed</option><option value="Ready in Rack">Ready in Rack</option><option value="Courier / Bus">Courier / Bus</option><option value="Delivered">Delivered</option></select></div><div><label>Delivered By</label><select id="deliveredby"></select></div><div><label>Customer Email (Optional)</label><input id="email" type="email" placeholder="Optional email"></div></div><label style="display:block;margin:12px 0"><input type="checkbox" id="couriertoggle" onchange="document.getElementById('courierfields').style.display=this.checked?'block':'none'"> Courier / Parcel — Add Receiver Details</label><div id="courierfields" style="display:none"><div class="grid"><div><label>Receiver Name</label><input id="receiver" placeholder="Receiver name"></div><div><label>Receiver Phone</label><input id="receiverphone" placeholder="Receiver phone"></div><div><label>Door / Street / Area</label><input id="address" placeholder="Address"></div><div><label>Village / City</label><input id="city"></div><div><label>District</label><input id="district"></div><div><label>State</label><input id="state" value="Tamil Nadu"></div><div><label>PIN Code</label><input id="pincode" maxlength="6" inputmode="numeric"></div><div><label>Landmark</label><input id="landmark"></div></div></div></details><details id="attachmentsection" style="margin:12px 0;border:1px solid #cbd9eb;border-radius:10px;padding:12px"><summary style="cursor:pointer;font-weight:bold">🎙️ Voice Note / 🖼️ JPG Design / 📊 Excel Attachments (Optional)</summary><p class="muted">Optional. Attachments are stored in this browser. Open an existing bill to view, download, replace or delete.</p><div class="actions"><button type="button" id="recordbtn" onclick="toggleVoiceRecording()">🎙️ Start Voice Recording</button><button type="button" class="secondary" onclick="document.getElementById('designupload').click()">+ JPG Design</button><button type="button" class="secondary" onclick="document.getElementById('excelupload').click()">+ Excel / CSV</button></div><input class="hidden" id="designupload" type="file" accept="image/jpeg,.jpg,.jpeg" multiple onchange="addAttachments(this,'image')"><input class="hidden" id="excelupload" type="file" accept=".xlsx,.xls,.csv" multiple onchange="addAttachments(this,'excel')"><p id="recordstatus" class="muted" aria-live="polite"></p><div id="attachmentlist"></div><div id="attachmentpreview" style="overflow:auto;max-height:420px"></div></details><div class="grid"><div><label>Discount Amount ₹</label><input type="number" min="0" id="discount" value="0" oninput="calculate()"></div><div><label>Payment Mode</label><select id="paymode"><option>Cash</option><option>UPI / BharatPe</option><option>Bank</option><option>Other</option></select></div><div><label>Amount Received Now ₹</label><input type="number" min="0" id="received" value="0" oninput="calculate()"></div><div><label>Remarks</label><textarea id="remarks" rows="2"></textarea></div></div><div id="rewardpanel" class="panel"><h3>🌈 Custom Order Reward Coins</h3><p class="muted">₹100 = 1 Coin; 1 Coin = ₹1. Earn after full payment. Direct Sale has no coins or redemption.</p><div id="coininfo"></div><label>Redeem Coins (₹1 each)</label><input id="redeem" type="number" min="0" value="0" oninput="calculate()"></div><div class="actions"><button class="save-bill" onclick="saveBill()">Save Bill</button><button class="secondary" onclick="previewDraft()">👁 Preview Bill</button><button class="secondary" onclick="whatsappDraft()">💬 WhatsApp</button><button class="secondary" onclick="newBill(currentType)">Clear</button></div></div></section>
+<section id="history" class="page"><div class="panel"><h2>Bill History</h2><div class="grid"><div><label>Billing Type</label><select id="filtertype" onchange="renderHistory()"><option value="all">All</option><option value="order">Customer Orders only</option><option value="direct">Direct Sales only</option></select></div><div><label>Customer Order Category</label><select id="filterordercategory" onchange="renderHistory()"><option value="all">All Orders</option><option value="team">Team Orders</option><option value="single">Single Orders</option></select></div><div><label>Order Status</label><select id="filterstatus" onchange="renderHistory()"><option value="all">All Statuses</option><option>Pending Bills</option><option>Packing Completed</option><option>Ready in Rack</option><option>Courier / Bus</option><option>Delivered</option></select></div><div><label>Search</label><input id="filtersearch" oninput="renderHistory()" placeholder="Bill no / customer / mobile"></div></div><div id="historyrows" class="scroll"></div></div></section>
+<section id="production" class="page"><div class="panel"><h2>Production Stage Tracker</h2><p class="muted">Customer Orders only. Open a bill from History or Dashboard to edit its stages.</p><div id="stageeditor"></div></div></section><section id="credit" class="page"><div class="panel"><h2>Credit List — Orders & Direct Sales</h2><div id="creditrows" class="scroll"></div></div></section>
+<section id="reports" class="page"><div class="panel"><h2>Monthly GST / Normal Bill Export</h2><div class="grid"><div><label>Month</label><input id="exportmonth" type="month"></div><div><label>Category</label><select id="exportcategory"><option value="gst">GST Bills</option><option value="normal">Normal Bills (No GST)</option><option value="all">All Bills</option></select></div><div><label>Order Category</label><select id="exportordercategory"><option value="all">Team + Single</option><option value="team">Team Orders</option><option value="single">Single Orders</option></select></div><div><label>Billing Type</label><select id="exporttype"><option value="all">Both</option><option value="order">Custom Orders</option><option value="direct">Direct Sales</option></select></div></div><button onclick="exportMonthly()">Export Excel-compatible CSV</button><p class="muted">CSV opens in Excel. For PDF, use browser Print → Save as PDF from the invoice.</p></div></section><section id="settings" class="page"><div class="panel"><h2>Shop / Sender Details</h2><div class="grid"><div><label>Shop Name</label><input id="shopname" value="RAINBOW SPORTS"></div><div><label>Shop Phone</label><input id="shopphone" value="9943295343"></div><div><label>Full Address</label><textarea id="shopaddress">Bommidi, Pappireddipatti Taluk, Dharmapuri District, Tamil Nadu</textarea></div><div><label>Shop PIN Code</label><input id="shoppin" maxlength="6" placeholder="Enter shop PIN"></div><div><label>GSTIN (verify)</label><input id="shopgst" placeholder="Enter verified GSTIN"></div></div><button onclick="saveShop()">Save Shop Details</button><h3>Staff</h3><p>திருமால், Nandhini, Kumatha, Geetha, Revathi, Bharathi, Archana, Surya, Jeevitha</p><h2>Payment QR Settings</h2><p>UPI ID (locked in this version): <b>BHARATPE2C0Y0N0U1U34312@unitype</b></p><p class="muted">Fixed QR is the original BharatPe QR image. Amount QR uses a UPI payment URI and should be tested with a small payment before use. QR scanning does not automatically confirm payment.</p><div class="qrrow"><div class="qrbox"><img id="fixedqr" src="assets/bharatpe-fixed-qr.png" alt="Original BharatPe QR"><div>Fixed QR</div></div><div><label>Custom Amount ₹</label><input id="qramount" type="number" min="0" value="1" oninput="makeQR()"><div id="dynamicqr"></div><div>Amount QR</div></div></div><hr><h3>Backup / Restore</h3><div class="actions"><button onclick="backup()">Download JSON Backup</button><button class="secondary" onclick="document.getElementById('restorefile').click()">Restore JSON Backup</button><input type="file" id="restorefile" accept=".json" class="hidden" onchange="restoreBackup(event)"></div><p class="muted">Important: Data is saved only in this browser on this device. GitHub/Netlify deployment does not synchronize bills across devices. Take regular backups.</p></div></section>
+</main><div id="printdialog" class="hidden" role="dialog" aria-modal="true" aria-label="Print invoice settings" style="position:fixed;inset:0;background:#10223b99;z-index:9999;display:flex;align-items:center;justify-content:center;padding:15px"><div class="panel" style="width:min(480px,100%);max-height:90vh;overflow:auto;margin:0"><h2>Invoice Print / PDF</h2><label>Paper Size</label><select id="paperpreset" onchange="updatePrintWidth()"><option value="a4">A4 Portrait — 210 × 297 mm</option><option value="58">Thermal 58 mm</option><option value="80">Thermal 80 mm (3-inch class)</option><option value="100">Thermal 100 mm (4-inch class)</option><option value="custom">Custom width (mm)</option></select><div id="customwidthbox" class="hidden"><label>Paper width in mm</label><input type="number" id="customwidth" min="40" max="210" value="80"></div><p class="muted">Select the matching paper size in your printer's Windows driver / browser print settings. For PDF, choose “Save as PDF” in the print destination.</p><div class="actions"><button onclick="startInvoicePrint()">Print / Save as PDF</button><button class="secondary" onclick="closePrintDialog()">Cancel</button></div></div></div><div id="previewdialog" class="hidden" role="dialog" aria-modal="true" aria-label="Invoice preview" style="position:fixed;inset:0;background:#10223bd9;z-index:9998;overflow:auto;padding:15px"><div style="max-width:850px;margin:auto"><div class="panel" style="position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:8px"><b style="flex:1">👁 Invoice Preview</b><button type="button" onclick="openPrintDialog()">🖨 Print / PDF</button><button type="button" style="background:#188653" onclick="whatsappCurrent()">💬 WhatsApp</button><button type="button" class="secondary" onclick="closeInvoicePreview()">Close ✕</button></div><section id="previewrack" class="panel hidden" aria-label="Rack">
+<h3>Rack</h3><output id="previewracknumber" aria-live="polite"></output>
+<div id="previewrackactions" class="actions">
+<input id="previewrackinput" aria-label="Rack number" inputmode="numeric" placeholder="1–50 (blank = auto)" maxlength="24">
+<button type="button" onclick="savePreviewRack()">Assign Rack</button>
+<button type="button" class="secondary" onclick="deliverPreviewBill()">Delivered</button>
+</div></section><div id="previewpaper" style="background:white;box-shadow:0 8px 30px #1115;border-radius:8px;overflow:auto"></div><p style="color:white;text-align:center">WhatsApp opens a prefilled message. Attach the saved PDF manually before sending.</p></div></div><div id="printarea"><div id="invoiceprint"></div></div><script>
+const UPI='BHARATPE2C0Y0N0U1U34312@unitype',KEY='rainbow_billing_v3';let bills=JSON.parse(localStorage.getItem(KEY)||'[]'),currentType='order',editId=null;const $=id=>document.getElementById(id),money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function persist(){
+ for(const bill of bills){
+  if(bill.type==='order'&&bill.status==='Delivered'){
+   delete bill.rackNo;
+   delete bill.lastRackNo;
+  }
+ }
+ localStorage.setItem(KEY,JSON.stringify(bills));
+}function show(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(page).classList.add('active');document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));let t=$('tab'+page);if(t)t.classList.add('active');if(page==='dashboard')renderDashboard();if(page==='history')renderHistory();if(page==='credit')renderCredit();if(page==='settings'){makeQR();loadShop()}if(page==='reports')$('exportmonth').value=new Date().toISOString().slice(0,7)}
+function nextNo(type){let prefix=type==='order'?'RS':'DS',nums=bills.filter(x=>x.type===type).map(x=>Number(x.no.split('-').pop())||0);return prefix+'-'+String(Math.max(0,...nums)+1).padStart(4,'0')}
+function toggleTeamName(){const team=$('ordertype').value==='team';$('teamnamebox').style.display=team?'':'none'}
+function newBill(type){resetAttachmentDraft();currentType=type;editId=null;$('editortitle').textContent=(type==='order'?'Customer Order':'Direct Sale')+' — '+nextNo(type);['customer','mobile','deliverydate','email','remarks','receiver','receiverphone','address','city','district','pincode','landmark'].forEach(id=>$(id).value='');$('state').value='Tamil Nadu';$('ordertype').value='team';$('teamname').value='';setBillGst();$('ordertypepanel').style.display=type==='order'?'':'none';toggleTeamName();$('redeem').value=0;$('discount').value=0;$('customerhistory').textContent='';$('customer').dataset.autofilled='no';lastAutoPhone='';$('phonehint').textContent='Enter existing mobile number to fill customer name automatically.';$('takenby').value='';$('deliveredby').value='';$('billdate').value=new Date().toLocaleDateString('en-CA');$('status').value='Pending Bills';$('received').value='0';$('paymode').value='Cash';$('itemrows').innerHTML='';addItem();$('status').parentElement.style.display=type==='direct'?'none':'';$('deliveryfield').style.display=type==='direct'?'none':'';$('extraoptions').open=false;$('couriertoggle').checked=false;$('courierfields').style.display='none';$('rewardpanel').style.display=type==='direct'?'none':'';show('editor');calculate()}
+function renumberItemRows(){
+ Array.from($('itemrows').rows).forEach((row,index)=>{
+  row.cells[0].textContent=String(index+1);
+ });
+}
+function setBillGst(items=[]){
+ const input=$('billgst');
+ input.querySelector('option[data-saved]')?.remove();
+ const rates=[...new Set(items.map(item=>Number(item.gst)||0))];
+ const rate=rates.length>1?'mixed':String(rates[0]??5);
+ if(!Array.from(input.options).some(option=>option.value===rate)){
+  const option=new Option(rate==='mixed'?'Mixed rates (saved)':rate+'% (saved)',rate);
+  option.dataset.saved='';
+  input.add(option);
+ }
+ input.value=rate;
+}
+function addItem(item={}){let tr=document.createElement('tr');tr.dataset.gst=item.gst??0;tr.innerHTML='<td></td><td><input class="desc" placeholder="Item" value="'+esc(item.desc||'')+'"></td><td><input class="qty" type="number" min="0" value="'+(item.qty??1)+'"></td><td><input class="rate" type="number" min="0" value="'+(item.rate??0)+'"></td><td class="line-amount"></td><td><button class="danger" type="button">×</button></td>';tr.querySelector('button').onclick=()=>{tr.remove();renumberItemRows();calculate()};tr.querySelectorAll('input,select').forEach(i=>i.addEventListener('input',calculate));$('itemrows').appendChild(tr);renumberItemRows();calculate()}
+function getItems(){return [...$('itemrows').children].map(tr=>({desc:tr.querySelector('.desc').value,qty:+tr.querySelector('.qty').value||0,rate:+tr.querySelector('.rate').value||0,gst:$('billgst').value==='mixed'?Number(tr.dataset.gst)||0:Number($('billgst').value)}))}function amounts(items){let subtotal=0,tax=0;items.forEach(i=>{let base=i.qty*i.rate;subtotal+=base;tax+=base-(base/(1+(Number(i.gst)||0)/100))});return {subtotal:subtotal-tax,tax,total:subtotal}}function calculate(){const items=getItems();
+ items.forEach((item,index)=>{
+  $('itemrows').rows[index].querySelector('.line-amount').textContent=money(item.qty*item.rate);
+ });
+ const a=amounts(items);
+ const existing=bills.find(b=>b.id===editId);
+ const received=(existing?paid(existing):0)+(+$('received').value||0);let redemption=validRedeem(a.total);a.total=Math.max(0,a.total-redemption-(Math.max(0,+$('discount').value||0)));if(currentType==='order')$('coininfo').textContent='Available: '+availableCoins($('mobile').value,editId)+' Coins | Earn after full payment: '+Math.floor(a.total/100);$('billtotal').textContent='Taxable Value '+money(a.subtotal)+' | Included GST '+money(a.tax)+' | Total '+money(a.total)+' | Balance '+money(Math.max(0,a.total-received))}
+function formBill(){let items=getItems(),a=amounts(items),paid=+$('received').value||0,redemption=validRedeem(a.total);a.total=Math.max(0,a.total-redemption-(Math.max(0,+$('discount').value||0)));return {discount:Math.max(0,+$('discount').value||0),id:editId||crypto.randomUUID(),no:editId?bills.find(x=>x.id===editId).no:nextNo(currentType),type:currentType,orderCategory:currentType==='order'?$('ordertype').value:null,teamName:currentType==='order'&&$('ordertype').value==='team'?$('teamname').value.trim():'',customer:$('customer').value.trim()||'Walk-in Customer',mobile:$('mobile').value,receiver:$('receiver').value,receiverphone:$('receiverphone').value,address:$('address').value,city:$('city').value,district:$('district').value,state:$('state').value,pincode:$('pincode').value,landmark:$('landmark').value,email:$('email').value,takenby:$('takenby').value,deliveredby:$('deliveredby').value,redeemed:currentType==='order'?redemption:0,date:$('billdate').value,delivery:currentType==='direct'?$('billdate').value:$('deliverydate').value,status:currentType==='direct'?'Direct Sale':$('status').value,paymode:$('paymode').value,remarks:$('remarks').value,items,...a,payments:editId?[...bills.find(x=>x.id===editId).payments]:[],stages:editId?[...(bills.find(x=>x.id===editId).stages||[])]:[],newPaid:paid}}
+async function saveBill(){let b=formBill();if(!b.items.length||b.items.every(i=>!i.desc.trim()))return alert('Enter at least one item');if(b.type==='order'&&b.redeemed>availableCoins(b.mobile,b.id))return alert('Not enough reward coins');if(b.newPaid<0||b.newPaid>b.total+0.001)return alert('Invalid amount received');let prior=b.payments.reduce((s,p)=>s+p.amount,0);if(prior+b.newPaid>b.total+0.001)return alert('Payment exceeds total');if(b.newPaid>0)b.payments.push({amount:b.newPaid,date:new Date().toISOString(),mode:b.paymode});delete b.newPaid;let i=bills.findIndex(x=>x.id===b.id);
+ if(i>=0&&bills[i].status!=='Delivered')b.rackNo=bills[i].rackNo;
+ if(b.type==='order'&&b.status==='Ready in Rack'&&!b.rackNo&&!reserveRack(b))return;
+ if(i>=0)bills[i]=b;else bills.push(b);
+ persist();try{await commitAttachments(b.id)}catch(e){alert('Bill saved, but attachments could not be saved: '+e.message);return}show('history');printInvoice(b)}
+function paid(b){return (b.payments||[]).reduce((s,p)=>s+p.amount,0)}function balance(b){return Math.max(0,b.total-paid(b))}let skippedPending=new Set();function resetSkipped(){skippedPending.clear();renderDashboard()}function skipPending(id){skippedPending.add(id);renderDashboard()}function searchBill(b,q){return [b.no,b.customer,b.mobile,b.teamName,b.orderCategory,b.id].some(v=>String(v??'').toLowerCase().includes(q))}function latestProcess(b){
+ if(b.status==='Delivered')return 'Delivered';
+ if(b.status==='Courier / Bus')return 'Courier / Bus';
+ if(b.status==='Ready in Rack')return b.rackNo?'Ready in Rack':'Ready in Rack — rack number not assigned';
+ let steps=Array.isArray(b.stages)?b.stages:[];
+ let active=steps.find(st=>!st.done&&String(st.name||'').trim());
+ if(active)return String(active.name)+' — In Progress / Pending';
+ let done=[...steps].reverse().find(st=>st.done&&String(st.name||'').trim());
+ if(done)return String(done.name)+' — Completed';
+ return b.status||'Order Received';
+}
+function rackQuickResults(q){
+ let box=$('rackquickresults');if(!box)return;
+ if(!q){box.innerHTML='';return}
+ let found=bills.filter(b=>searchBill(b,q)).reverse();
+ if(!found.length){box.innerHTML='<div class="rack-result">No matching order found. Check customer name, phone or invoice number.</div>';return}
+ box.innerHTML='<h3>Customer Order Lookup ('+found.length+')</h3>'+found.slice(0,25).map(b=>{
+ let rackReady=b.type==='order'&&b.status==='Ready in Rack'&&b.rackNo;
+ let isDelivered=b.status==='Delivered';
+ return '<div class="rack-result"><div><b>'+esc(b.customer||'Customer')+'</b> · '+esc(b.no)+' · '+esc(b.mobile||'')+' · '+esc(b.type==='direct'?'Direct Sale':((b.orderCategory||'team')==='single'?'Single Order':'Team Order'))+'</div>'+
+ (rackReady?'<div class="muted">PARCEL LOCATION</div><div class="rack-hero">'+esc(b.rackNo)+'</div><b class="rack-tag">✓ Ready in Rack</b>':
+ '<div class="rack-hero" style="font-size:clamp(19px,4vw,28px)">'+esc(latestProcess(b))+'</div>'+(isDelivered?'<b>Already Delivered</b>':'<span class="muted">Not yet available in an assigned rack</span>'))+
+ (b.type==='order'&&!isDelivered?'<div class="actions"><label>Rack Number <input id="rackinput_'+b.id+'" inputmode="numeric" placeholder="1–50 (blank = auto)" value="'+esc(b.rackNo||'')+'" maxlength="24"></label><button onclick="assignRack(&quot;'+esc(b.id)+'&quot;,this.previousElementSibling.querySelector(&quot;input&quot;).value)">Save Rack / Ready</button>'+(b.rackNo?'<button class="secondary" onclick="clearRack(&quot;'+b.id+'&quot;)">Clear Rack</button>':'')+'<button class="secondary" onclick="openStages(&quot;'+b.id+'&quot;)">Update Process</button><button class="secondary" onclick="markRackDelivered(&quot;'+b.id+'&quot;)">Delivered</button></div>':'')+'</div>'
+ }).join('')+(found.length>25?'<p class="muted">Showing first 25 results. Enter more letters or digits to narrow results.</p>':'');
+}
+const rackCapacity=50;
+function rackSlot(value){
+ const label=String(value??'').trim();
+ const match=/^(?:(?:rack|r)\s*[-#]?\s*)?(\d+)$/i.exec(label);
+ const number=match?Number(match[1]):0;
+ return number>=1&&number<=rackCapacity?number:0;
+}
+function reserveRack(b,input=''){
+ const entered=String(input).trim();
+ const requested=rackSlot(entered);
+ if(entered&&!requested){
+  alert('Enter a rack number from 1 to '+rackCapacity+'.');
+  return false;
+ }
+ const occupied=new Set(bills
+  .filter(order=>order.id!==b.id&&order.type==='order'&&order.status!=='Delivered')
+  .map(order=>rackSlot(order.rackNo)));
+ if(requested&&occupied.has(requested)){
+  alert('Rack '+requested+' is already occupied. Enter a different number or leave it blank for automatic assignment.');
+  return false;
+ }
+ const current=rackSlot(b.rackNo);
+ let slot=requested;
+ if(!slot&&current&&!occupied.has(current))slot=current;
+ if(!slot){
+  for(let number=1;number<=rackCapacity;number++){
+   if(!occupied.has(number)){slot=number;break}
+  }
+ }
+ if(!slot){
+  alert('All '+rackCapacity+' racks are occupied.');
+  return false;
+ }
+ b.rackNo=String(slot);
+ b.status='Ready in Rack';
+ return true;
+}
+function assignRack(id,input=''){
+ const b=bills.find(order=>order.id===id);
+ if(!b||b.type!=='order'||b.status==='Delivered'||!reserveRack(b,input))return false;
+ persist();
+ renderDashboard();
+ renderHistory();
+ renderCredit();
+ return true;
+}
+function clearRack(id){let b=bills.find(x=>x.id===id);if(!b||!confirm('Clear this rack assignment?'))return;b.rackNo='';if(b.status==='Ready in Rack')b.status='Packing Completed';persist();renderDashboard()}
+function markRackDelivered(id){let b=bills.find(x=>x.id===id);if(!b||!confirm('Confirm parcel handed over to customer?'))return;b.status='Delivered';persist();renderDashboard();renderHistory();renderCredit();return true}
+function renderDashboard(){let orders=bills.filter(b=>b.type==='order'),direct=bills.filter(b=>b.type==='direct');$('stats').innerHTML=[['Order Sales',orders.reduce((s,b)=>s+b.total,0)],['Direct Sales',direct.reduce((s,b)=>s+b.total,0)],['Total Collection',bills.reduce((s,b)=>s+paid(b),0)],['Credit Balance',bills.reduce((s,b)=>s+balance(b),0)]].map(([k,v])=>'<div class="stat">'+k+'<b>'+money(v)+'</b></div>').join('');let pending=bills.filter(b=>b.type==='order'&&b.status==='Pending Bills').reverse();$('pendingcount').textContent=pending.length+' pending';let q=$('dashsearch').value.trim().toLowerCase();rackQuickResults(q);$('dashresults').innerHTML=q?'<h3>Search Results ('+bills.filter(b=>searchBill(b,q)).length+')</h3>'+tableBills(bills.filter(b=>searchBill(b,q)).reverse()):'';let visible=pending.filter(b=>!skippedPending.has(b.id)).slice(0,10);$('pendingrows').innerHTML=visible.length?'<table><thead><tr><th>Invoice No</th><th>Date</th><th>Customer</th><th>Phone</th><th>Amount</th><th>Balance</th><th>Move Status</th><th>Action</th></tr></thead><tbody>'+visible.map(b=>'<tr><td>'+esc(b.no)+'</td><td>'+esc(b.date)+'</td><td>'+esc(b.customer)+'</td><td>'+esc(b.mobile)+'</td><td>'+money(b.total)+'</td><td>'+money(balance(b))+'</td><td>'+statusSelect(b)+'</td><td><button onclick="assignRack(&quot;'+esc(b.id)+'&quot;)">Move to Rack</button> <button class="secondary" onclick="skipPending(\''+b.id+'\')">Skip</button> <button onclick="printBill(\''+b.id+'\')">Preview</button> <button class="secondary" onclick="sendWhatsApp(\''+b.id+'\')">WhatsApp</button> <button class="secondary" onclick="editBill(\''+b.id+'\')">Edit</button></td></tr>').join('')+'</tbody></table>':'<p class="muted">No pending bills to show.</p>';$('recent').innerHTML=bills.slice(-6).reverse().map(b=>'<p><b>'+esc(b.no)+'</b> — '+esc(b.customer)+' — '+money(b.total)+' — '+esc(b.status)+'</p>').join('')||'<p>No bills yet.</p>'}
+const statuses=['Pending Bills','Packing Completed','Ready in Rack','Courier / Bus','Delivered'];function statusSelect(b){return b.type==='direct'?'<span class="pill">Direct Sale</span>':'<select aria-label="Move status" onchange="moveStatus(\''+b.id+'\',this.value)">'+statuses.map(s=>'<option '+(b.status===s?'selected':'')+'>'+s+'</option>').join('')+'</select>'}function rackButton(b){
+ if(b.type!=='order'||b.status==='Delivered')return '';
+ const action='assignRack('+JSON.stringify(b.id)+')';
+ const label=b.rackNo?'Rack '+b.rackNo:'Assign Rack';
+ return '<button type="button" class="secondary" onclick="'+esc(action)+'">'+esc(label)+'</button> ';
+}
+function tableBills(arr,numberRows=false){return '<table><thead><tr>'+(numberRows?'<th scope="col">S.No</th>':'')+'<th>Bill</th><th>Date</th><th>Customer</th><th>Type</th><th>Total</th><th>Balance</th><th>Move Status</th><th>Actions</th></tr></thead><tbody>'+arr.map((b,index)=>'<tr>'+(numberRows?'<td>'+(index+1)+'</td>':'')+'<td>'+esc(b.no)+'</td><td>'+esc(b.date)+'</td><td>'+esc(b.customer)+'</td><td>'+esc(b.type==='direct'?'Direct Sale':((b.orderCategory||'team')==='single'?'Single Order':'Team Order'))+'</td><td>'+money(b.total)+'</td><td>'+money(balance(b))+'</td><td>'+statusSelect(b)+'</td><td>'+rackButton(b)+'<button onclick="printBill(\''+b.id+'\')">Preview</button> <button class="secondary" onclick="sendWhatsApp(\''+b.id+'\')">WhatsApp</button> <button class="secondary" onclick="editBill(\''+b.id+'\')">Edit</button> ' +(b.type==='order'?'<button class="secondary" onclick="openStages(\''+b.id+'\')">Stages</button>':'')+' <button class="secondary" onclick="addPayment(\''+b.id+'\')">+ Payment</button></td></tr>').join('')+'</tbody></table>'}function renderHistory(){let type=$('filtertype').value,status=$('filterstatus').value,q=$('filtersearch').value.toLowerCase(),category=$('filterordercategory').value;let arr=bills.filter(b=>(type==='all'||b.type===type)&&(status==='all'||b.status===status)&&(category==='all'||(b.type==='order'&&(b.orderCategory||'team')===category))&&searchBill(b,q)).reverse();$('historyrows').innerHTML=tableBills(arr,true)}function renderCredit(){$('creditrows').innerHTML=tableBills(bills.filter(b=>balance(b)>0.009).reverse())}function moveStatus(id,s){let b=bills.find(x=>x.id===id);if(!b||b.type==='direct')return;if(s==='Ready in Rack'){
+ if(!reserveRack(b)){renderHistory();renderDashboard();renderCredit();return}
+ }else b.status=s;
+ persist();renderHistory();renderDashboard();renderCredit()}
+function editBill(id){let b=bills.find(x=>x.id===id);if(!b)return;newBill(b.type);editId=id;loadBillAttachments(id);$('editortitle').textContent='Edit '+b.no;['customer','mobile','deliverydate','email','remarks','receiver','receiverphone','address','city','district','state','pincode','landmark','email','takenby','deliveredby'].forEach(k=>$(k).value=b[k]||'');$('couriertoggle').checked=!!(b.receiver||b.address||b.pincode);$('courierfields').style.display=$('couriertoggle').checked?'block':'none';$('ordertype').value=b.orderCategory||'team';$('teamname').value=b.teamName||'';toggleTeamName();$('redeem').value=b.redeemed||0;$('discount').value=b.discount||0;$('billdate').value=b.date;$('status').value=b.status;$('itemrows').innerHTML='';setBillGst(b.items);b.items.forEach(addItem);$('received').value=0;calculate()}
+function addPayment(id){let b=bills.find(x=>x.id===id),due=balance(b);if(due<=0)return alert('Fully paid');let input=prompt('Balance '+money(due)+'\nEnter payment received:',String(due));if(input===null)return;let n=Number(input);if(!Number.isFinite(n)||n<=0||n>due+0.001)return alert('Invalid amount');let mode=prompt('Payment mode (Cash / UPI / Bank):','UPI')||'Other';b.payments.push({amount:n,date:new Date().toISOString(),mode});persist();renderHistory();renderCredit()}
+function previewDraft(){let b=formBill();delete b.newPaid;printInvoice(b)}function printBill(id){let b=bills.find(x=>x.id===id);if(b)printInvoice(b)}function qrUri(amount){let p=new URLSearchParams({pa:UPI,pn:'RAINBOW SPORTS',cu:'INR'});if(Number(amount)>0)p.set('am',Number(amount).toFixed(2));return 'upi://pay?'+p.toString()}
+function qrInto(el,amount,size=130){el.innerHTML='';if(typeof QRCode==='undefined'){el.textContent='QR generator needs internet access';return}new QRCode(el,{text:qrUri(amount),width:size,height:size,correctLevel:QRCode.CorrectLevel.M})}function makeQR(){qrInto($('dynamicqr'),$('qramount').value,140)}
+function printInvoice(b){activePreviewBill=b;let a=amounts(b.items),rows=b.items.map((i,j)=>'<tr><td>'+(j+1)+'</td><td>'+esc(i.desc)+'</td><td>'+i.qty+'</td><td>'+money(i.rate)+'</td><td>'+money(i.qty*i.rate)+'</td></tr>').join('');let due=balance(b);let printAmount=due;let qrAmount=Number(printAmount);if(!Number.isFinite(qrAmount)||qrAmount<0)qrAmount=due;$('invoiceprint').innerHTML='<div class="invoicehead"><div><h2 class="gold">JUSTHUE®</h2><small>WEAR YOUR COLOUR</small></div><div style="text-align:center"><h1>🌈 RAINBOW SPORTS</h1><small>RAINBOW GARMENTS PRODUCTION BY JUSTHUE®</small><p class="invsmall">T-Shirt Printing | Jersey & Sportswear | Corporate Tees | School / College / Teams</p></div><div class="invsmall"><b>GSTIN: 33ALFPT8682N1Z9</b><br>☎ 9943295343<br>WhatsApp: 9042295343</div></div><h2 style="text-align:center">TAX INVOICE</h2><div class="invoicegrid"><div><b>Bill To:</b><p>'+esc(b.customer)+'<br>'+esc(b.mobile)+'</p>'+(b.type==='order'?'<b>Order Type:</b> '+esc((b.orderCategory||'team')==='single'?'Single Order':'Team Order')+(b.teamName?' — '+esc(b.teamName):'')+'<br>':'')+'<b>Remarks:</b> '+esc(b.remarks)+'</div><div><b>Invoice No:</b> '+esc(b.no)+'<br><b>Invoice Date:</b> '+esc(b.date)+'<br><b>Delivery Date:</b> '+esc(b.delivery)+'<br><b>Status:</b> '+esc(b.status)+'</div></div><table class="invtable"><thead><tr><th>S.No</th><th>Description</th><th>Qty</th><th>Rate (₹)</th><th>Amount (₹)</th></tr></thead><tbody>'+rows+'</tbody></table><div class="totals"><div><span>Taxable Value</span><span>'+money(a.subtotal)+'</span></div><div><span>CGST</span><span>'+money(a.tax/2)+'</span></div><div><span>SGST</span><span>'+money(a.tax/2)+'</span></div><div><span>Discount</span><span>-'+money(b.discount||0)+'</span></div><div><span>Reward Redeemed</span><span>-'+money(b.redeemed||0)+'</span></div><div><span>Total Amount</span><span>'+money(b.total)+'</span></div><div><span>Paid</span><span>'+money(paid(b))+'</span></div><div><span>Balance</span><span>'+money(due)+'</span></div></div><div class="invfooter"><div class="invsmall"><b>BharatPe Fixed QR</b><br><img src="assets/bharatpe-fixed-qr.png" alt="Fixed payment QR"></div><div class="invsmall"><b>Amount QR: '+money(qrAmount)+'</b><div id="printdynamic" class="qrsmall"></div></div><div class="invsmall">📍 Bommidi, Pappireddipatti Taluk,<br>Dharmapuri District, Tamil Nadu.</div><div style="font-style:italic;font-size:25px">Thank You!</div></div>';qrInto($('printdynamic'),qrAmount,95);openInvoicePreview()}
+
+let activePreviewBill=null;
+function savedPreviewOrder(){
+ return bills.find(b=>b===activePreviewBill&&b.type==='order');
+}
+function renderPreviewRack(){
+ const bill=savedPreviewOrder();
+ const delivered=bill?.status==='Delivered';
+ $('previewrack').classList.toggle('hidden',!bill||delivered);
+ $('previewracknumber').textContent=bill&&!delivered?bill.rackNo||'':'';
+ $('previewrackinput').value=$('previewracknumber').textContent;
+}
+function savePreviewRack(){
+ const bill=savedPreviewOrder();
+ if(bill&&assignRack(bill.id,$('previewrackinput').value))printInvoice(bill);
+}
+function deliverPreviewBill(){
+ const bill=savedPreviewOrder();
+ if(bill&&markRackDelivered(bill.id))printInvoice(bill);
+}
+function openInvoicePreview(){
+ const paper=document.getElementById('previewpaper'),src=document.getElementById('invoiceprint');
+ paper.innerHTML=src.innerHTML;
+ const old=src.querySelector('#printdynamic'),target=paper.querySelector('#printdynamic');
+ if(old&&target){target.innerHTML=old.innerHTML;const canvas=old.querySelector('canvas');if(canvas){const image=document.createElement('img');image.src=canvas.toDataURL('image/png');image.style.width='95px';target.innerHTML='';target.appendChild(image)}}
+ renderPreviewRack();
+ document.getElementById('previewdialog').classList.remove('hidden');
+}
+function closeInvoicePreview(){document.getElementById('previewdialog').classList.add('hidden')}
+function whatsappMessage(b){return 'RAINBOW SPORTS\nInvoice: '+b.no+'\nCustomer: '+b.customer+'\nDate: '+b.date+'\nTotal: '+money(b.total)+'\nPaid: '+money(paid(b))+'\nBalance: '+money(balance(b))+'\nStatus: '+b.status+'\nThank you!'}
+function whatsappBill(b){
+ if(!b)return alert('Save or select a bill first.');
+ let phone=String(b.mobile||'').replace(/\D/g,'');if(phone.length===10)phone='91'+phone;
+ if(!/^\d{11,15}$/.test(phone))return alert('Enter a valid customer mobile number with country code.');
+ const url='https://wa.me/'+phone+'?text='+encodeURIComponent(whatsappMessage(b));
+ const tab=window.open(url,'_blank','noopener,noreferrer');if(!tab)alert('Allow pop-ups to open WhatsApp.');
+}
+function whatsappCurrent(){whatsappBill(activePreviewBill)}
+function sendWhatsApp(id){whatsappBill(bills.find(b=>b.id===id))}
+function whatsappDraft(){const b=formBill();if(!b.items.length)return alert('Add products first.');whatsappBill(b)}
+
+function backup(){let blob=new Blob([JSON.stringify({version:3,bills},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='rainbow-billing-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url)}function restoreBackup(e){let file=e.target.files[0];if(!file)return;file.text().then(s=>{let d=JSON.parse(s);if(!Array.isArray(d.bills))throw Error('Invalid backup');if(!confirm('Replace current bills with backup?'))return;bills=d.bills;persist();show('dashboard');alert('Backup restored')}).catch(err=>alert(err.message))}show('dashboard');
+
+let activeStageBill=null;
+function openStages(id){const b=bills.find(x=>x.id===id);if(!b||b.type!=='order')return;activeStageBill=id;show('production');renderStages()}
+function renderStages(){const b=bills.find(x=>x.id===activeStageBill),el=$('stageeditor');if(!b){el.innerHTML='<p>Select a customer order from Bill History.</p>';return}b.stages=b.stages||[];el.innerHTML='<h3>'+esc(b.no)+' — '+esc(b.customer)+'</h3><p class="muted">Any number of optional steps. Tick completed steps, edit names and notes, move steps up/down, or remove them. Changes save immediately on this device.</p>'+b.stages.map((st,i)=>'<div class="stage-row"><input type="checkbox" '+(st.done?'checked':'')+' onchange="changeStage('+i+',&quot;done&quot;,this.checked)" aria-label="Stage complete"><input type="text" value="'+esc(st.name)+'" onchange="changeStage('+i+',&quot;name&quot;,this.value)" aria-label="Stage name"><input class="stage-note" type="text" placeholder="Reminder / Notes" value="'+esc(st.note||'')+'" onchange="changeStage('+i+',&quot;note&quot;,this.value)"><button class="secondary" onclick="shiftStage('+i+',-1)" '+(i===0?'disabled':'')+'>↑</button><button class="secondary" onclick="shiftStage('+i+',1)" '+(i===b.stages.length-1?'disabled':'')+'>↓</button><button class="secondary" onclick="removeStage('+i+')">✕</button></div>').join('')+'<div class="stage-controls"><input id="nextstage" placeholder="Next stage (e.g. Cutting / Printing)" list="stagechoices"><datalist id="stagechoices"><option value="Order Received"><option value="Cutting"><option value="Printing"><option value="Stitching"><option value="Checking"><option value="Packing"><option value="Rack"><option value="Courier / Bus"><option value="Delivered"></datalist><button onclick="addStage()">+ Add Stage</button><button class="secondary" onclick="show(&quot;history&quot;)">Back to Bill History</button></div><p class="muted">Completed '+b.stages.filter(x=>x.done).length+' / '+b.stages.length+' stages</p>'}
+function changeStage(i,k,v){let b=bills.find(x=>x.id===activeStageBill);if(!b||!b.stages[i])return;b.stages[i][k]=v;if(k==='done')b.stages[i].completedAt=v?new Date().toISOString():null;persist();renderStages()}
+function addStage(){let b=bills.find(x=>x.id===activeStageBill),name=$('nextstage').value.trim();if(!b||!name)return alert('Enter stage name');b.stages.push({name,done:false,note:'',completedAt:null});persist();renderStages()}
+function removeStage(i){let b=bills.find(x=>x.id===activeStageBill);if(!b)return;b.stages.splice(i,1);persist();renderStages()}
+function shiftStage(i,d){let b=bills.find(x=>x.id===activeStageBill),j=i+d;if(!b||j<0||j>=b.stages.length)return;[b.stages[i],b.stages[j]]=[b.stages[j],b.stages[i]];persist();renderStages()}
+
+const STAFF=['','திருமால்','Nandhini','Kumatha','Geetha','Revathi','Bharathi','Archana','Surya','Jeevitha'];
+for(const id of ['takenby','deliveredby'])$(id).innerHTML=STAFF.map(n=>'<option value="'+esc(n)+'">'+esc(n||'Select staff')+'</option>').join('');
+$('mobile').addEventListener('input',()=>{autoFillCustomerByPhone();calculate()});
+$('mobile').addEventListener('change',()=>{autoFillCustomerByPhone();calculate()});
+function phoneDigits(v){return String(v||'').replace(/\D/g,'').replace(/^91(?=\d{10}$)/,'');}
+let lastAutoPhone='';
+function autoFillCustomerByPhone(){
+  if(editId)return; // Editing an existing invoice must never overwrite its customer.
+  const phone=phoneDigits($('mobile').value),hint=$('phonehint');
+  if(phone.length!==10){
+    if(lastAutoPhone && $('customer').dataset.autofilled==='yes'){$('customer').value='';$('customer').dataset.autofilled='no';lastAutoPhone='';}
+    hint.textContent=phone.length?'Enter complete 10-digit phone number.':'Enter existing mobile number to fill customer name automatically.';
+    $('customerhistory').textContent='';return;
+  }
+  const list=bills.filter(b=>phoneDigits(b.mobile)===phone);
+  if(!list.length){
+    if(lastAutoPhone && $('customer').dataset.autofilled==='yes'){$('customer').value='';$('customer').dataset.autofilled='no';lastAutoPhone='';}
+    hint.textContent='New customer — enter name and save bill to remember it.';
+    $('customerhistory').textContent='No previous bills';return;
+  }
+  const b=[...list].reverse().find(x=>x.customer && x.customer!=='Walk-in Customer')||list[list.length-1];
+  if(!$('customer').value.trim() || $('customer').dataset.autofilled==='yes'){
+    $('customer').value=b.customer||'';$('customer').dataset.autofilled='yes';lastAutoPhone=phone;
+  }
+  hint.textContent='✓ Existing customer found: '+(b.customer||'')+' — name filled automatically.';
+  $('customerhistory').textContent=list.length+' previous bill(s): '+list.map(x=>x.no).join(', ');
+  for(const k of ['receiver','receiverphone','address','city','district','state','pincode','landmark'])if(b[k] && !$(k).value.trim())$(k).value=b[k];
+}
+$('customer').addEventListener('input',()=>{$('customer').dataset.autofilled='no';});
+function customerBills(phone){let p=phoneDigits(phone);return bills.filter(b=>p.length===10&&phoneDigits(b.mobile)===p)}
+function lookupCustomer(){autoFillCustomerByPhone();let list=customerBills($('mobile').value.trim());if(!list.length){$('customerhistory').textContent='New customer';return}let b=list[list.length-1];for(const k of ['customer','receiver','receiverphone','address','city','district','state','pincode','landmark'])if(b[k])$(k).value=b[k];$('customerhistory').textContent=list.length+' previous bill(s): '+list.map(x=>x.no).join(', ');calculate()}
+function viewCustomerBills(){let list=customerBills($('mobile').value.trim());$('customerhistory').innerHTML=list.length?list.map(b=>'<p>'+esc(b.no)+' | '+esc(b.date)+' | '+money(b.total)+' <button class="secondary" onclick="printBill(\''+b.id+'\')">Print</button></p>').join(''):'No previous bills found'}
+function availableCoins(phone,excludeId){if(!phone)return 0;let earned=0,used=0;for(let b of bills){if(b.type!=='order'||b.mobile!==phone)continue;if(b.id!==excludeId)used+=Number(b.redeemed)||0;if(balance(b)<0.01)earned+=Math.floor(Number(b.total||0)/100)}return Math.max(0,earned-used)}
+function validRedeem(gross){if(currentType!=='order')return 0;let n=Number($('redeem').value)||0;return Math.min(Math.max(0,Math.floor(n)),availableCoins($('mobile').value.trim(),editId),Math.floor(gross))}
+function shopDetails(){return JSON.parse(localStorage.getItem('rainbow_shop_details')||'{}')}
+function loadShop(){let d=shopDetails();for(let k of ['shopname','shopphone','shopaddress','shoppin','shopgst'])if(d[k])$(k).value=d[k]}
+function saveShop(){let d={};for(let k of ['shopname','shopphone','shopaddress','shoppin','shopgst'])d[k]=$(k).value;localStorage.setItem('rainbow_shop_details',JSON.stringify(d));alert('Shop details saved')}
+function printCourier(id){let b=bills.find(x=>x.id===id);if(!b)return;let d=shopDetails();$('invoiceprint').innerHTML='<h1>COURIER / PARCEL LABEL</h1><div style="border:2px solid #111;padding:18px;margin:15px 0"><h2>FROM</h2><b>'+esc(d.shopname||'RAINBOW SPORTS')+'</b><p>'+esc(d.shopaddress||'Bommidi, Dharmapuri, Tamil Nadu')+'</p><p>PIN: '+esc(d.shoppin||'Not set')+' | Phone: '+esc(d.shopphone||'9943295343')+'</p><p>GSTIN: '+esc(d.shopgst||'Not set')+'</p></div><div style="border:2px solid #111;padding:18px"><h2>TO</h2><b>'+esc(b.receiver||b.customer)+'</b><p>'+[b.address,b.landmark,b.city,b.district,b.state,b.pincode].filter(Boolean).map(esc).join(', ')+'</p><p>Phone: '+esc(b.receiverphone||b.mobile)+'</p><h2>Invoice: '+esc(b.no)+'</h2></div>';setTimeout(openPrintDialog,150)}
+function exportMonthly(){let m=$('exportmonth').value,cat=$('exportcategory').value,type=$('exporttype').value,category=$('exportordercategory').value;if(!m)return alert('Select month');let rows=bills.filter(b=>b.date?.startsWith(m)&&(type==='all'||b.type===type)&&(category==='all'||(b.type==='order'&&(b.orderCategory||'team')===category))&&(cat==='all'||(cat==='gst'?b.items.some(i=>Number(i.gst)>0):b.items.every(i=>Number(i.gst)===0))));let head=['Invoice','Date','Customer','Phone','Type','Order Category','Team Name','Taxable Value','Included GST','Discount Amount','Discount Coins','Total','Paid','Balance','Status'];let csv=[head,...rows.map(b=>[b.no,b.date,b.customer,b.mobile,b.type,b.orderCategory||"",b.teamName||"",b.subtotal,b.tax,b.discount||0,b.redeemed||0,b.total,paid(b),balance(b),b.status])].map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');let blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Rainbow_'+cat+'_'+m+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+
+let printIsCourier=false;
+function openPrintDialog(){document.getElementById('printdialog').classList.remove('hidden');updatePrintWidth()}
+function closePrintDialog(){document.getElementById('printdialog').classList.add('hidden')}
+function updatePrintWidth(){document.getElementById('customwidthbox').classList.toggle('hidden',document.getElementById('paperpreset').value!=='custom')}
+function startInvoicePrint(){
+ const preset=document.getElementById('paperpreset').value;
+ let width=preset==='a4'?210:Number(preset==='custom'?document.getElementById('customwidth').value:preset);
+ if(!Number.isFinite(width)||width<40||width>210)return alert('Enter width from 40 to 210 mm');
+ const thermal=preset!=='a4';
+ const size=preset==='a4'?'A4 portrait':width+'mm auto';
+ const css='@media print{@page{size:'+size+';margin:'+(thermal?'2mm':'12mm')+'}#invoiceprint{font-size:'+(thermal?'9px':'12px')+'!important;padding:0!important}#invoiceprint .invoicehead{display:block;text-align:center;border-width:2px!important}#invoiceprint .invoicehead h1{font-size:'+(thermal?'15px':'24px')+'!important}#invoiceprint .invoicegrid{display:block!important}#invoiceprint .invoicegrid>div{margin-bottom:5px}#invoiceprint .invtable th,#invoiceprint .invtable td{padding:'+(thermal?'2px':'6px')+'!important;font-size:'+(thermal?'8px':'11px')+'!important}#invoiceprint .invfooter{display:'+(thermal?'block':'flex')+'!important}#invoiceprint .invfooter img{width:'+(thermal?'60px':'95px')+'!important;height:auto!important}#invoiceprint .totals{max-width:100%!important}#invoiceprint .totals div{padding:3px!important}'+(thermal?'#invoiceprint .invoicehead small,#invoiceprint .invfooter .qrsmall{display:none!important}':'')+'}';
+ document.getElementById('dynamicprintstyle').textContent=css;
+ closePrintDialog();closeInvoicePreview();setTimeout(()=>window.print(),120)
+}
+</script><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script>
+// Files live in IndexedDB (not localStorage). They remain private to this browser/profile.
+let attachDraft=[],recorder=null,recordChunks=[],recStream=null,attachLoadToken=0;
+const attachDb=new Promise((resolve,reject)=>{let req=indexedDB.open('rainbow_invoice_attachments',1);req.onupgradeneeded=()=>{let db=req.result;if(!db.objectStoreNames.contains('files'))db.createObjectStore('files',{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});
+function attachmentTransaction(mode,action){return attachDb.then(db=>new Promise((resolve,reject)=>{let tx=db.transaction('files',mode),store=tx.objectStore('files');let request=action(store);request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)}))}
+function attachmentGetAll(){return attachmentTransaction('readonly',s=>s.getAll())}
+function attachmentPut(item){return attachmentTransaction('readwrite',s=>s.put(item))}
+function attachmentDelete(id){return attachmentTransaction('readwrite',s=>s.delete(id))}
+function resetAttachmentDraft(){attachLoadToken++;attachDraft=[];if(recorder&&recorder.state==='recording')recorder.stop();let list=document.getElementById('attachmentlist');if(list)list.innerHTML='';let preview=document.getElementById('attachmentpreview');if(preview)preview.innerHTML='';let section=document.getElementById('attachmentsection');if(section)section.open=false;let status=document.getElementById('recordstatus');if(status)status.textContent=''}
+async function loadBillAttachments(billId){let token=++attachLoadToken;try{let files=await attachmentGetAll();if(token!==attachLoadToken)return;attachDraft=files.filter(x=>x.billId===billId).map(x=>({...x}));renderAttachments()}catch(e){alert('Cannot open saved attachments: '+e.message)}}
+async function addAttachments(input,kind){let files=Array.from(input.files||[]);for(let f of files){if(kind==='image'&&!(/\.jpe?g$/i.test(f.name)&&f.type.startsWith('image/')))continue;if(kind==='excel'&&!/\.(xlsx|xls|csv)$/i.test(f.name))continue;attachDraft.push({id:crypto.randomUUID(),billId:editId||null,name:f.name,kind,blob:f,created:new Date().toISOString()})}input.value='';renderAttachments();document.getElementById('attachmentsection').open=true}
+async function toggleVoiceRecording(){if(recorder&&recorder.state==='recording'){recorder.stop();return}if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined')return alert('Recording requires HTTPS, microphone permission and a supported browser');try{recStream=await navigator.mediaDevices.getUserMedia({audio:true});recordChunks=[];recorder=new MediaRecorder(recStream);recorder.ondataavailable=e=>{if(e.data.size)recordChunks.push(e.data)};recorder.onstop=()=>{let blob=new Blob(recordChunks,{type:recorder.mimeType||'audio/webm'});if(blob.size)attachDraft.push({id:crypto.randomUUID(),billId:editId||null,name:'Voice_'+new Date().toISOString().replace(/[:.]/g,'-')+'.webm',kind:'audio',blob,created:new Date().toISOString()});recStream?.getTracks().forEach(t=>t.stop());document.getElementById('recordbtn').textContent='🎙️ Start Voice Recording';document.getElementById('recordstatus').textContent='Voice note recorded (optional). Save Bill to keep it.';renderAttachments()};recorder.start();document.getElementById('recordbtn').textContent='⏹ Stop Recording';document.getElementById('recordstatus').textContent='Recording...'}catch(e){alert('Microphone unavailable: '+e.message)}}
+function renderAttachments(){let el=document.getElementById('attachmentlist');if(!el)return;el.innerHTML=attachDraft.length?attachDraft.map((a,i)=>'<div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #ddd;padding:8px 0"><span style="flex:1;min-width:140px">'+esc(a.name)+' ('+a.kind+')</span><button type="button" class="secondary" onclick="previewAttachment('+i+')">Preview</button><button type="button" class="secondary" onclick="downloadAttachment('+i+')">Download</button><button type="button" class="secondary" onclick="replaceAttachment('+i+')">Replace</button><button type="button" class="danger" onclick="removeAttachment('+i+')">Delete</button></div>').join(''):'<p class="muted">No attachments added. You can save without them.</p>'}
+function removeAttachment(i){let a=attachDraft[i];if(!a||!confirm('Delete '+a.name+'? Save Bill to confirm changes.'))return;attachDraft.splice(i,1);renderAttachments();document.getElementById('attachmentpreview').innerHTML=''}
+function replaceAttachment(i){let a=attachDraft[i];if(!a)return;let input=document.createElement('input');input.type='file';input.accept=a.kind==='image'?'.jpg,.jpeg':a.kind==='excel'?'.xlsx,.xls,.csv':'audio/*';input.onchange=()=>{let f=input.files?.[0];if(!f)return;if(a.kind==='image'&&!/\.jpe?g$/i.test(f.name))return alert('Choose JPG/JPEG');if(a.kind==='excel'&&!/\.(xlsx|xls|csv)$/i.test(f.name))return alert('Choose Excel or CSV');attachDraft[i]={...a,name:f.name,blob:f,created:new Date().toISOString()};renderAttachments();document.getElementById('attachmentpreview').innerHTML=''};input.click()}
+function downloadAttachment(i){let a=attachDraft[i];if(!a)return;let url=URL.createObjectURL(a.blob),link=document.createElement('a');link.href=url;link.download=a.name;link.click();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+async function previewAttachment(i){let a=attachDraft[i],box=document.getElementById('attachmentpreview');if(!a)return;box.innerHTML='';if(a.kind==='image'||a.kind==='audio'){let url=URL.createObjectURL(a.blob),el=document.createElement(a.kind==='image'?'img':'audio');el.src=url;if(a.kind==='audio')el.controls=true;else{el.style.maxWidth='100%';el.style.maxHeight='400px'}box.appendChild(el);return}if(/\.csv$/i.test(a.name)){let text=await a.blob.text();renderCsvPreview(text,box);return}if(typeof XLSX!=='undefined'){try{let bytes=await a.blob.arrayBuffer(),wb=XLSX.read(bytes,{type:'array'});let select=document.createElement('select');for(let name of wb.SheetNames){let opt=document.createElement('option');opt.textContent=name;select.appendChild(opt)}let holder=document.createElement('div');box.append(select,holder);let show=()=>{holder.innerHTML=XLSX.utils.sheet_to_html(wb.Sheets[select.value],{editable:false})};select.onchange=show;show();return}catch(e){box.textContent='Preview failed: '+e.message;return}}box.textContent='Excel preview library is unavailable offline. Download the original Excel file to view it.'}
+function renderCsvPreview(text,box){let rows=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean).slice(0,150).map(line=>line.split(','));let table=document.createElement('table');for(let row of rows){let tr=document.createElement('tr');for(let value of row){let td=document.createElement('td');td.textContent=value;tr.appendChild(td)}table.appendChild(tr)}box.appendChild(table)}
+async function commitAttachments(billId){let stored=(await attachmentGetAll()).filter(x=>x.billId===billId);let keep=new Set(attachDraft.map(x=>x.id));for(let item of stored)if(!keep.has(item.id))await attachmentDelete(item.id);for(let item of attachDraft)await attachmentPut({...item,billId});}
+</script></body></html>
+<script async src="/.netlify/scripts/hud?variant=public" data-nf-variant="public" data-netlify-site-id="a4c45415-22a1-4cf0-8563-0680f62c8124" data-app-host="app.netlify.com" data-account-tier="free"></script>
