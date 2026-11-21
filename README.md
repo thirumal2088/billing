@@ -1,6 +1,6 @@
 Rainbow Sports Billing — Invoice Preview & WhatsApp update
 
-For manual deploy, extract the ZIP and upload the folder containing index.html and assets to your existing Netlify site. For a Git-connected site, keep index.html and netlify.toml at the repository root, leave the build command blank, and use "." as the publish directory.
+For a Git-connected Netlify site, use the repository root as the base directory. The root netlify.toml sets the build command to node scripts/build-netlify.mjs and publishes dist/client. For a manual deploy, run the same command locally and upload the generated dist/client folder. This serves the browser-local billing app. See README.txt for the separate Python shared-billing setup.
 
 New:
 - Preview Bill opens a full invoice overlay before printing.
