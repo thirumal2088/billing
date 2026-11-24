@@ -14,7 +14,9 @@ import uuid
 ROOT = Path(__file__).resolve().parent
 DB = Path(os.environ.get("RAINBOW_DB", ROOT / "billing.sqlite3"))
 ACCOUNTS = {}
-MAX_REQUEST = 8 * 1024 * 1024
+MAX_REQUEST = 12 * 1024 * 1024
+MAX_ATTACHMENTS = 8 * 1024 * 1024
+SHOP_FIELDS = {"shopname", "shopphone", "shopaddress", "shoppin", "shopgst"}
 
 
 class Conflict(Exception):
@@ -30,11 +32,15 @@ def setup():
         db.execute("CREATE TABLE IF NOT EXISTS bills (sequence INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT UNIQUE NOT NULL, version INTEGER NOT NULL, body TEXT NOT NULL)")
         db.execute("CREATE TABLE IF NOT EXISTS metadata (revision INTEGER NOT NULL)")
         db.execute("INSERT INTO metadata SELECT 0 WHERE NOT EXISTS (SELECT 1 FROM metadata)")
+        db.execute("CREATE TABLE IF NOT EXISTS bill_files (bill_id TEXT PRIMARY KEY, body TEXT NOT NULL)")
+        db.execute("CREATE TABLE IF NOT EXISTS shop (id INTEGER PRIMARY KEY CHECK(id=1), body TEXT NOT NULL)")
+        db.execute("INSERT OR IGNORE INTO shop VALUES (1, '{}')")
 
 
 def snapshot(db):
     return {
         "revision": db.execute("SELECT revision FROM metadata").fetchone()[0],
+        "shop": json.loads(db.execute("SELECT body FROM shop WHERE id=1").fetchone()[0]),
         "bills": [
             dict(json.loads(body), sequence=number, version=version)
             for number, version, body in db.execute(
@@ -90,10 +96,39 @@ def validate_receipts(payments, previous):
             raise ValueError("Entries on a receipt must share a payer and date")
 
 
-def save(changes, importing=False):
+def validate_files(files):
+    if not isinstance(files, list) or len(files) > 30:
+        raise ValueError("Use up to 30 attachments per bill")
+    total_size = 0
+    ids = set()
+    for file in files:
+        file_id = file["id"]
+        if str(uuid.UUID(file_id)) != file_id or file_id in ids:
+            raise ValueError("Invalid attachment ID")
+        ids.add(file_id)
+        if file["kind"] not in ("image", "audio", "excel"):
+            raise ValueError("Invalid attachment type")
+        if not isinstance(file["name"], str) or len(file["name"]) > 255:
+            raise ValueError("Invalid attachment filename")
+        mime = file["mime"]
+        if not isinstance(mime, str) or len(mime) > 100:
+            raise ValueError("Invalid attachment format")
+        total_size += len(base64.b64decode(file["data"], validate=True))
+        if total_size > MAX_ATTACHMENTS:
+            raise ValueError("Combined attachments must be 8 MB or less")
+
+
+def save(changes, importing=False, shop=None):
     with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         changed = False
+        if shop is not None:
+            if not isinstance(shop, dict) or set(shop) != SHOP_FIELDS or any(
+                not isinstance(value, str) or len(value) > 1000 for value in shop.values()
+            ):
+                raise ValueError("Invalid shop details")
+            db.execute("UPDATE shop SET body=? WHERE id=1", (json.dumps(shop),))
+            changed = True
         for change in changes:
             bill = dict(change["bill"])
             validate(bill)
@@ -136,6 +171,13 @@ def save(changes, importing=False):
                 if not importing:
                     bill["no"] = next_invoice_number(db)
                 db.execute("UPDATE bills SET body=? WHERE id=?", (json.dumps(bill), bill["id"]))
+            if "files" in change:
+                files = change["files"]
+                validate_files(files)
+                db.execute(
+                    "INSERT INTO bill_files VALUES (?,?) ON CONFLICT(bill_id) DO UPDATE SET body=excluded.body",
+                    (bill["id"], json.dumps(files)),
+                )
             changed = True
         if importing and changed:
             legacy_numbers = [
@@ -185,6 +227,13 @@ class Handler(BaseHTTPRequestHandler):
             with closing(connect()) as db:
                 db.execute("BEGIN")
                 return self.json_reply(200, snapshot(db))
+        if self.path.startswith("/api/bill-files/"):
+            bill_id = self.path.rsplit("/", 1)[-1]
+            with closing(connect()) as db:
+                if not db.execute("SELECT 1 FROM bills WHERE id=?", (bill_id,)).fetchone():
+                    return self.json_reply(404, {"error": "Bill not found"})
+                row = db.execute("SELECT body FROM bill_files WHERE bill_id=?", (bill_id,)).fetchone()
+            return self.reply(200, row[0].encode() if row else b"[]")
         if self.path in ("/", "/index.html"):
             return self.reply(200, (ROOT / "index.html").read_bytes(), "text/html; charset=utf-8")
         assets = {
@@ -204,10 +253,11 @@ class Handler(BaseHTTPRequestHandler):
             size = int(self.headers.get("Content-Length", "0"))
             if self.headers.get_content_type() != "application/json" or not 0 < size <= MAX_REQUEST:
                 raise ValueError
-            changes = json.loads(self.rfile.read(size))["changes"]
+            data = json.loads(self.rfile.read(size))
+            changes = data["changes"]
             if not isinstance(changes, list):
                 raise ValueError
-            return self.json_reply(200, save(changes))
+            return self.json_reply(200, save(changes, shop=data.get("shop")))
         except Conflict as error:
             self.json_reply(409, {"error": str(error)})
         except (ValueError, KeyError, TypeError, AttributeError):

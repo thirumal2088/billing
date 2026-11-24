@@ -3,7 +3,7 @@ RAINBOW SPORTS SHARED BILLING
 Use one HTTPS address for all billing admins. The same server serves both
 the dashboard and the billing API. Each admin signs in with their own
 username and password. They see the same bills, balances, production and
-rack status. Open a bill by tapping its invoice or customer label.
+rack status, grand total, attachments and shop details. Open a bill by tapping its invoice or customer label.
 Swipe the list horizontally to see the remaining columns.
 
 SERVER SETUP
@@ -33,5 +33,10 @@ New invoice numbers are issued centrally. Dashboard changes are checked
 every four seconds while open.
 
 Invoice preview uses the supplied Rainbow Sports artwork and fixed BharatPe
-QR. Print/PDF and WhatsApp are available from preview. Browser-local design,
-voice and Excel attachments and shop settings are outside the shared database.
+QR. Print/PDF and WhatsApp are available from preview. New design, voice and Excel files are stored with the bill and visible to every
+admin. Each bill supports up to 30 files, with an 8 MB combined limit.
+Old browser-local attachments and shop settings are absent from the old
+JSON export. Re-attach files to their imported bills and re-enter the shop
+details once in the shared app. For a complete backup including attachments
+and settings, back up the SQLite database with the SQLite backup API or
+while the billing process is stopped.
