@@ -2,7 +2,7 @@
 import argparse
 import base64
 from contextlib import closing
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import hmac
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
@@ -51,6 +51,23 @@ def validate(bill):
         raise ValueError("Invalid bill type")
     if not isinstance(bill["items"], list) or not isinstance(bill["payments"], list):
         raise ValueError("Invalid items or payments")
+
+
+INDIA_TIME = timezone(timedelta(hours=5, minutes=30))
+MONTHS = ("JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+          "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")
+
+
+def next_invoice_number(db, now=None):
+    local = (now or datetime.now(timezone.utc)).astimezone(INDIA_TIME)
+    prefix = f"INV-{MONTHS[local.month - 1]}-{local.year % 100:02d}-"
+    latest = db.execute(
+        """SELECT max(CAST(substr(invoice, ?) AS INTEGER))
+           FROM (SELECT json_extract(body, '$.no') AS invoice FROM bills)
+           WHERE invoice LIKE ?""",
+        (len(prefix) + 1, prefix + "%"),
+    ).fetchone()[0]
+    return f"{prefix}{(latest or 0) + 1:04d}"
 
 
 def validate_receipts(payments, previous):
@@ -112,12 +129,12 @@ def save(changes, importing=False):
                     (json.dumps(bill), bill["id"]),
                 )
             else:
-                number = db.execute(
+                db.execute(
                     "INSERT INTO bills (id, version, body) VALUES (?,1,'{}')",
                     (bill["id"],),
-                ).lastrowid
+                )
                 if not importing:
-                    bill["no"] = f"RS-{number:04d}"
+                    bill["no"] = next_invoice_number(db)
                 db.execute("UPDATE bills SET body=? WHERE id=?", (json.dumps(bill), bill["id"]))
             changed = True
         if importing and changed:
