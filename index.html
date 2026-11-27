@@ -84,7 +84,7 @@ function startInvoicePrint(){
 }
 @media (max-width:370px) { #stats { grid-template-columns:1fr 1fr; } .tabs button { font-size:12px; padding:9px 10px; } .actions {grid-template-columns:1fr;} }
 @media print { .tabs {position:static;} }
-</style><style id="rackquickcss">.rack-result{border:1px solid #d5e0ee;border-radius:12px;padding:14px;margin:12px 0;background:#f7faff}.rack-hero{font-size:clamp(30px,7vw,55px);font-weight:900;line-height:1.15;color:#133c73;margin:7px 0}.rack-result .actions{margin-top:10px}.rack-result .muted{font-size:13px}.rack-result button{margin:4px}.rack-tag{font-weight:700}.rack-result input{max-width:145px;display:inline-block}.rack-result .rack-line{display:flex;align-items:center;flex-wrap:wrap;gap:8px}</style><style>.stagebox{background:#f8fbff;border:1px solid #cbd8ea;border-radius:12px;padding:15px;margin:12px 0}.stage-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:9px 0}.stage-row input[type=text]{flex:1;min-width:125px}.stage-row .stage-note{flex:2;min-width:130px}.stage-row button{padding:8px}.stage-controls{display:flex;gap:8px;flex-wrap:wrap}.stagebox .muted{font-size:13px}</style><style id="dynamicprintstyle"></style><style>
+</style><style id="rackquickcss">.rack-result{border:1px solid #d5e0ee;border-radius:12px;padding:14px;margin:12px 0;background:#f7faff}.rack-hero{font-size:clamp(30px,7vw,55px);font-weight:900;line-height:1.15;color:#133c73;margin:7px 0}.rack-result .actions{margin-top:10px}.rack-result .muted{font-size:13px}.rack-result button{margin:4px}.rack-tag{font-weight:700}.rack-result input{max-width:145px;display:inline-block}.rack-result .rack-line{display:flex;align-items:center;flex-wrap:wrap;gap:8px}</style><style>.stagebox{background:#f8fbff;border:1px solid #cbd8ea;border-radius:12px;padding:15px;margin:12px 0}.stage-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:9px 0}.stage-row input[type=text]{flex:1;min-width:125px}.stage-row .stage-note{flex:2;min-width:130px}.stage-row button{padding:8px}.stage-controls{display:flex;gap:8px;flex-wrap:wrap}.stagebox .muted{font-size:13px}</style><style id="dynamicprintstyle"></style><style>.loginscreen{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px;background:linear-gradient(110deg,#fc6b50,#ffc638,#25aa8a,#276ac4,#8139a7);overflow:auto}.loginscreen.hidden{display:none!important}.loginpanel{width:100%;max-width:400px;margin:0}.loginpanel h1{margin:0;font-size:24px}.loginpanel h2{margin:14px 0 4px}.loginpanel button{width:100%;margin-top:14px}.loginerror{color:#b53645;font-weight:600;min-height:1em;margin:10px 0 0}#userbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;font-size:13px;font-weight:600}#userbar button{padding:6px 11px}.syncpill{background:#ffffffd9;color:#0e284b;border-radius:20px;padding:4px 10px}.syncpill.offline{background:#ffe3e3;color:#8c1d2a}.importbox{border:1px solid #cbd8ea;background:#f8fbff;border-radius:12px;padding:14px;margin-top:10px}.importbox ul{margin:8px 0;padding-left:20px}.staffrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;border-bottom:1px solid #e1e8f0;padding:9px 0}.staffrow span{flex:1;min-width:180px}.staffrow button{padding:7px 10px}@media print{.loginscreen{display:none!important}}</style><style>
 #printdialog.hidden{display:none!important}
 @media print{#previewdialog{display:none!important}#printdialog{display:none!important}#invoiceprint{width:100%;min-height:0!important}#invoiceprint table{min-width:0!important;table-layout:fixed}#invoiceprint th,#invoiceprint td{overflow-wrap:anywhere}#invoiceprint img{max-width:100%}}
 @media screen{#printarea{display:none}}
@@ -153,7 +153,7 @@ button.save-bill{background:#16743b;font-size:17px;padding:14px 24px;min-height:
  .order-card .actions{margin:4px 0}
  #dashboard .rack-save-row{display:flex;flex-wrap:wrap}
 }
-</style></head><body><header><h1>🌈 RAINBOW SPORTS — BOMMIDI</h1><small>JUSTHUE® • Billing & Order Management</small></header><main><div class="tabs"><button onclick="show('dashboard')" id="tabdashboard">Dashboard</button><button onclick="newBill('order')" id="taborder">Order</button><button onclick="show('history')" id="tabhistory">Bill History</button><button onclick="show('production')" id="tabproduction">உற்பத்தி</button><button onclick="show('credit')" id="tabcredit">Credit List</button><button onclick="show('reports')" id="tabreports">Monthly Exports</button><button onclick="show('settings')" id="tabsettings">Settings / Backup</button></div>
+</style></head><body><div id="loginscreen" class="loginscreen"><form class="panel loginpanel" id="loginform" onsubmit="event.preventDefault();submitLogin()"><h1>🌈 RAINBOW SPORTS</h1><p class="muted">JUSTHUE® • Billing & Order Management</p><h2 id="logintitle">Staff Login</h2><div id="setupfields" class="hidden"><p class="muted">First-time setup: create the owner (admin) login. You need the setup key saved in the Netlify project settings.</p><label>Setup Key</label><input id="setupkey" type="password" autocomplete="off"><label>Your Name</label><input id="setupname" maxlength="80"></div><label>Mobile Number</label><input id="loginmobile" inputmode="tel" autocomplete="username" maxlength="14" required><label>Password</label><input id="loginpassword" type="password" autocomplete="current-password" required><p id="loginerror" class="loginerror" role="alert"></p><button id="loginbutton" type="submit">Sign in</button></form></div><header><h1>🌈 RAINBOW SPORTS — BOMMIDI</h1><small>JUSTHUE® • Billing & Order Management</small><div id="userbar" class="hidden"><span id="syncstate" class="syncpill">● Connecting…</span><span id="username"></span><button type="button" class="secondary" onclick="signOut()">Sign out</button></div></header><main><div class="tabs"><button onclick="show('dashboard')" id="tabdashboard">Dashboard</button><button onclick="newBill('order')" id="taborder">Order</button><button onclick="show('history')" id="tabhistory">Bill History</button><button onclick="show('production')" id="tabproduction">உற்பத்தி</button><button onclick="show('credit')" id="tabcredit">Credit List</button><button onclick="show('reports')" id="tabreports">Monthly Exports</button><button onclick="show('settings')" id="tabsettings">Settings / Backup</button></div>
 <section id="dashboard" class="page"><div class="panel"><h2>Dashboard</h2><div class="grid" id="stats"></div></div><div class="panel"><h3>Pending Bills <span id="pendingcount" class="pill"></span></h3><p class="muted">Dashboard-ல் அதிகபட்சம் 10 Pending Customer Orders. Skip என்பது இந்த பட்டியலில் மட்டும் தற்காலிகமாக மறைக்கும்; பில்லின் Status மாறாது.</p><div class="grid"><div><label>Quick Search — Phone / Invoice No / Bill No / Customer Name</label><input id="dashsearch" oninput="renderDashboard()" placeholder="Search any bill..." autocomplete="off"></div></div><div id="rackquickresults" aria-live="polite"></div><div id="dashresults"></div><div id="pendingrows"></div><div class="actions"><button class="secondary" onclick="resetSkipped()">Show Skipped Bills</button><button class="secondary" onclick="show('history')">View All Bill History</button></div></div><div class="panel"><h3>Recent Bills</h3><div id="recent"></div></div></section>
 <section id="editor" class="page"><div class="panel"><div class="bill-editor-heading"><h2 id="editortitle">New Bill</h2><button class="save-bill" onclick="saveBill()">Save Bill</button></div><div class="grid"><div><label>1. Staff Name / Order Taken By *</label><select id="takenby"></select></div><div><label>2. Customer Name</label><input id="customer" placeholder="Customer Name"></div><div><label>3. Mobile Number — auto-fill Customer Name</label><input id="mobile" type="tel" inputmode="numeric" maxlength="15" autocomplete="off" placeholder="Enter customer phone number"><small id="phonehint" class="muted" aria-live="polite">Enter existing mobile number to fill customer name automatically.</small></div></div><div><label for="village">ஊர் / Village</label><input id="village" autocomplete="address-level2"></div><div id="ordertypepanel" class="grid" style="margin-top:10px"><div><label>Order Type *</label><select id="ordertype" onchange="toggleTeamName()"><option value="team">Team Order</option><option value="single">Single Order</option><option value="shop">Shop Sale</option></select></div><div id="teamnamebox"><label>Team Name (Optional)</label><input id="teamname" placeholder="Cricket Club / School / Team"></div></div><div class="order-gst"><label for="billgst">GST (Inclusive)</label><select id="billgst" onchange="calculate()"><option value="0">Non-GST</option><option value="5" selected>5%</option><option value="12">12%</option><option value="18">18%</option></select></div><div class="actions"><button class="secondary" onclick="viewCustomerBills()">Previous Bills</button></div><div id="customerhistory" class="muted"></div><h3>Items</h3><div class="scroll"><table class="bill-items"><thead><tr><th scope="col">S.No</th><th>Description</th><th>Qty</th><th>Rate ₹</th><th>Total ₹</th><th aria-label="Remove item"></th></tr></thead><tbody id="itemrows"></tbody></table></div><div class="actions"><button class="secondary" onclick="addItem()">+ Add Item</button></div><p id="billtotal" class="bill-totals"></p><input type="hidden" id="billdate"><details id="extraoptions"><summary style="cursor:pointer;font-weight:bold;padding:10px 0">Optional Details (Delivery / Courier / Email / Status)</summary><div class="grid"><div id="deliveryfield"><label>Expected Delivery Date (Optional)</label><input type="date" id="deliverydate"></div><div><label>Order / Delivery Status</label><select id="status"><option value="Pending Bills">Pending Bills</option><option value="Packing Completed">Packing Completed</option><option value="Ready in Rack">Ready in Rack</option><option value="Courier / Bus">Courier / Bus</option><option value="Delivered">Delivered</option></select></div><div><label>Delivered By</label><select id="deliveredby"></select></div><div><label>Customer Email (Optional)</label><input id="email" type="email" placeholder="Optional email"></div></div><label style="display:block;margin:12px 0"><input type="checkbox" id="couriertoggle" onchange="document.getElementById('courierfields').style.display=this.checked?'block':'none'"> Courier / Parcel — Add Receiver Details</label><div id="courierfields" style="display:none"><div class="grid"><div><label>Receiver Name</label><input id="receiver" placeholder="Receiver name"></div><div><label>Receiver Phone</label><input id="receiverphone" placeholder="Receiver phone"></div><div><label>Door / Street / Area</label><input id="address" placeholder="Address"></div><div><label>Village / City</label><input id="city"></div><div><label>District</label><input id="district"></div><div><label>State</label><input id="state" value="Tamil Nadu"></div><div><label>PIN Code</label><input id="pincode" maxlength="6" inputmode="numeric"></div><div><label>Landmark</label><input id="landmark"></div></div></div></details><div class="actions">
 <button type="button" id="recordbtn" onclick="toggleVoiceRecording()">🎙 Voice Note</button>
@@ -165,7 +165,7 @@ button.save-bill{background:#16743b;font-size:17px;padding:14px 24px;min-height:
 <details id="attachmentsection" style="margin:12px 0;border:1px solid #cbd9eb;border-radius:10px;padding:12px"><summary style="cursor:pointer;font-weight:bold">🎙️ Voice Note / 🖼️ Design Image / 📊 Excel Attachments (Optional)</summary><p class="muted">Optional. Attachments are stored in this browser. Open an existing bill to view, download, replace or delete.</p><div class="actions"><button type="button" class="secondary" onclick="document.getElementById('excelupload').click()">+ Excel / CSV</button></div><input class="hidden" id="designupload" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple onchange="addAttachments(this,'image')"><input class="hidden" id="excelupload" type="file" accept=".xlsx,.xls,.csv" multiple onchange="addAttachments(this,'excel')"><div id="attachmentlist"></div><div id="attachmentpreview" style="overflow:auto;max-height:420px"></div></details><div class="grid"><div><label>Discount Amount ₹</label><input type="number" min="0" id="discount" value="0" oninput="calculate()"></div><div><label>Payment Mode</label><select id="paymode"><option>Cash</option><option>UPI / BharatPe</option><option>Bank</option><option>Other</option></select></div><div><label>Amount Received Now ₹</label><input type="number" min="0" id="received" value="0" oninput="calculate()"></div><div><label>Remarks</label><textarea id="remarks" rows="2"></textarea></div></div><div id="rewardpanel" class="panel"><h3>🌈 Custom Order Reward Coins</h3><p class="muted">₹100 = 1 Coin; 1 Coin = ₹1. Earn after full payment. Direct Sale has no coins or redemption.</p><div id="coininfo"></div><label>Redeem Coins (₹1 each)</label><input id="redeem" type="number" min="0" value="0" oninput="calculate()"></div><div class="actions"><button class="secondary" onclick="previewDraft()">👁 Preview Bill</button><button class="secondary" onclick="whatsappDraft()">💬 WhatsApp</button><button class="secondary" onclick="newBill(currentType)">Clear</button></div></div></section>
 <section id="history" class="page"><div class="panel"><h2>Bill History</h2><div class="grid"><div><label>Billing Type</label><select id="filtertype" onchange="renderHistory()"><option value="all">All</option><option value="order">Customer Orders only</option><option value="direct">Direct Sales only</option></select></div><div><label>Customer Order Category</label><select id="filterordercategory" onchange="renderHistory()"><option value="all">All Orders</option><option value="team">Team Orders</option><option value="single">Single Orders</option><option value="shop">Shop Sale</option></select></div><div><label>Order Status</label><select id="filterstatus" onchange="renderHistory()"><option value="all">All Statuses</option><option>Pending Bills</option><option>Packing Completed</option><option>Ready in Rack</option><option>Courier / Bus</option><option>Delivered</option></select></div><div><label>Search</label><input id="filtersearch" oninput="renderHistory()" placeholder="Bill no / customer / mobile"></div></div><div id="historyrows" class="scroll"></div></div></section>
 <section id="production" class="page"><div class="panel"><h2>உற்பத்தி</h2><div id="productionqueues"></div><div id="stageeditor" hidden></div></div></section><section id="credit" class="page"><div class="panel"><h2>Credit List — Orders & Direct Sales</h2><div id="creditrows" class="scroll"></div></div></section>
-<section id="reports" class="page"><div class="panel"><h2>Monthly GST / Normal Bill Export</h2><div class="grid"><div><label>Month</label><input id="exportmonth" type="month"></div><div><label>Category</label><select id="exportcategory"><option value="gst">GST Bills</option><option value="normal">Normal Bills (No GST)</option><option value="all">All Bills</option></select></div><div><label>Order Category</label><select id="exportordercategory"><option value="all">All Order Types</option><option value="team">Team Orders</option><option value="single">Single Orders</option><option value="shop">Shop Sale</option></select></div><div><label>Billing Type</label><select id="exporttype"><option value="all">Both</option><option value="order">Custom Orders</option><option value="direct">Direct Sales</option></select></div></div><button onclick="exportMonthly()">Export Excel-compatible CSV</button><p class="muted">CSV opens in Excel. For PDF, use browser Print → Save as PDF from the invoice.</p></div></section><section id="settings" class="page"><div class="panel"><h2>Shop / Sender Details</h2><div class="grid"><div><label>Shop Name</label><input id="shopname" value="RAINBOW SPORTS"></div><div><label>Shop Phone</label><input id="shopphone" value="9943295343"></div><div><label>Full Address</label><textarea id="shopaddress">Bommidi, Pappireddipatti Taluk, Dharmapuri District, Tamil Nadu</textarea></div><div><label>Shop PIN Code</label><input id="shoppin" maxlength="6" placeholder="Enter shop PIN"></div><div><label>GSTIN (verify)</label><input id="shopgst" placeholder="Enter verified GSTIN"></div></div><button onclick="saveShop()">Save Shop Details</button><h3>Staff</h3><p>திருமால், Nandhini, Kumatha, Geetha, Revathi, Bharathi, Archana, Surya, Jeevitha</p><h2>Payment QR Settings</h2><p>UPI ID (locked in this version): <b>BHARATPE2C0Y0N0U1U34312@unitype</b></p><p class="muted">Fixed QR is the original BharatPe QR image. Amount QR uses a UPI payment URI and should be tested with a small payment before use. QR scanning does not automatically confirm payment.</p><div class="qrrow"><div class="qrbox"><img id="fixedqr" src="assets/bharatpe-fixed-qr.png" alt="Original BharatPe QR"><div>Fixed QR</div></div><div><label>Custom Amount ₹</label><input id="qramount" type="number" min="0" value="1" oninput="makeQR()"><div id="dynamicqr"></div><div>Amount QR</div></div></div><hr><h3>Backup / Restore</h3><div class="actions"><button onclick="backup()">Download JSON Backup</button><button class="secondary" onclick="document.getElementById('restorefile').click()">Restore JSON Backup</button><input type="file" id="restorefile" accept=".json" class="hidden" onchange="restoreBackup(event)"></div><p class="muted">Important: Data is saved only in this browser on this device. GitHub/Netlify deployment does not synchronize bills across devices. Take regular backups.</p></div></section>
+<section id="reports" class="page"><div class="panel"><h2>Monthly GST / Normal Bill Export</h2><div class="grid"><div><label>Month</label><input id="exportmonth" type="month"></div><div><label>Category</label><select id="exportcategory"><option value="gst">GST Bills</option><option value="normal">Normal Bills (No GST)</option><option value="all">All Bills</option></select></div><div><label>Order Category</label><select id="exportordercategory"><option value="all">All Order Types</option><option value="team">Team Orders</option><option value="single">Single Orders</option><option value="shop">Shop Sale</option></select></div><div><label>Billing Type</label><select id="exporttype"><option value="all">Both</option><option value="order">Custom Orders</option><option value="direct">Direct Sales</option></select></div></div><button onclick="exportMonthly()">Export Excel-compatible CSV</button><p class="muted">CSV opens in Excel. For PDF, use browser Print → Save as PDF from the invoice.</p></div></section><section id="settings" class="page"><div class="panel"><h2>Shop / Sender Details</h2><div class="grid"><div><label>Shop Name</label><input id="shopname" value="RAINBOW SPORTS"></div><div><label>Shop Phone</label><input id="shopphone" value="9943295343"></div><div><label>Full Address</label><textarea id="shopaddress">Bommidi, Pappireddipatti Taluk, Dharmapuri District, Tamil Nadu</textarea></div><div><label>Shop PIN Code</label><input id="shoppin" maxlength="6" placeholder="Enter shop PIN"></div><div><label>GSTIN (verify)</label><input id="shopgst" placeholder="Enter verified GSTIN"></div></div><button onclick="saveShop()">Save Shop Details</button><h3>Staff</h3><p>திருமால், Nandhini, Kumatha, Geetha, Revathi, Bharathi, Archana, Surya, Jeevitha</p><h2>Payment QR Settings</h2><p>UPI ID (locked in this version): <b>BHARATPE2C0Y0N0U1U34312@unitype</b></p><p class="muted">Fixed QR is the original BharatPe QR image. Amount QR uses a UPI payment URI and should be tested with a small payment before use. QR scanning does not automatically confirm payment.</p><div class="qrrow"><div class="qrbox"><img id="fixedqr" src="assets/bharatpe-fixed-qr.png" alt="Original BharatPe QR"><div>Fixed QR</div></div><div><label>Custom Amount ₹</label><input id="qramount" type="number" min="0" value="1" oninput="makeQR()"><div id="dynamicqr"></div><div>Amount QR</div></div></div><hr><h3>Backup / Import</h3><div class="actions"><button onclick="backup()">Download JSON Backup</button><button class="secondary" onclick="document.getElementById('restorefile').click()">Import JSON Backup (safe)</button><button class="secondary" onclick="importBrowserBills()">Import bills saved in this browser</button><input type="file" id="restorefile" accept=".json,application/json" class="hidden" onchange="restoreBackup(event)"></div><p class="muted">All PCs and mobile phones now share one secure online database. Import never replaces or deletes anything: bills already in the shared database are skipped, and you see a summary before anything is added. Old bills saved inside this browser are left untouched.</p><div id="importpanel" class="importbox hidden" aria-live="polite"></div></div><div class="panel"><h2>My Account</h2><p id="accountinfo" class="muted"></p><div class="grid"><div><label>Current Password</label><input id="pwcurrent" type="password" autocomplete="current-password"></div><div><label>New Password (min 8 characters)</label><input id="pwnext" type="password" autocomplete="new-password"></div></div><div class="actions"><button onclick="changePassword()">Change Password</button><button class="secondary" onclick="signOut()">Sign out</button></div></div><div class="panel hidden" id="staffpanel"><h2>Staff Logins (Admin)</h2><p class="muted">Each staff member signs in with their own mobile number and password. Disabled staff are signed out immediately.</p><div id="stafflist"></div><h3>Add Staff Login</h3><div class="grid"><div><label>Name</label><input id="newstaffname" maxlength="80"></div><div><label>Mobile Number</label><input id="newstaffmobile" inputmode="tel" maxlength="14"></div><div><label>Password (min 8 characters)</label><input id="newstaffpassword" type="password" autocomplete="new-password"></div><div><label>Role</label><select id="newstaffrole"><option value="staff">Staff</option><option value="admin">Admin</option></select></div></div><button onclick="addStaff()">Add Staff Login</button></div></section>
 </main><div id="printdialog" class="hidden" role="dialog" aria-modal="true" aria-label="Print invoice settings" style="position:fixed;inset:0;background:#10223b99;z-index:9999;display:flex;align-items:center;justify-content:center;padding:15px"><div class="panel" style="width:min(480px,100%);max-height:90vh;overflow:auto;margin:0"><h2>Invoice Print / PDF</h2><label>Paper Size</label><select id="paperpreset" onchange="updatePrintWidth()"><option value="a4">A4 Portrait — 210 × 297 mm</option><option value="58">Thermal 58 mm</option><option value="80">Thermal 80 mm (3-inch class)</option><option value="100">Thermal 100 mm (4-inch class)</option><option value="custom">Custom width (mm)</option></select><div id="customwidthbox" class="hidden"><label>Paper width in mm</label><input type="number" id="customwidth" min="40" max="210" value="80"></div><p class="muted">Select the matching paper size in your printer's Windows driver / browser print settings. For PDF, choose “Save as PDF” in the print destination.</p><div class="actions"><button onclick="startInvoicePrint()">Print / Save as PDF</button><button class="secondary" onclick="closePrintDialog()">Cancel</button></div></div></div><div id="previewdialog" class="hidden" role="dialog" aria-modal="true" aria-label="Invoice preview" style="position:fixed;inset:0;background:#10223bd9;z-index:9998;overflow:auto;padding:15px"><div style="max-width:850px;margin:auto"><div class="panel" style="position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:8px"><b style="flex:1">👁 Invoice Preview</b><button type="button" onclick="openPrintDialog()">🖨 Print / PDF</button><button type="button" style="background:#188653" onclick="whatsappCurrent()">💬 WhatsApp</button><button type="button" class="secondary" onclick="closeInvoicePreview()">Close ✕</button></div><section id="previewrack" class="panel hidden" aria-label="Rack">
 <h3>Rack</h3><output id="previewracknumber" aria-live="polite"></output>
 <div id="previewrackactions" class="actions">
@@ -173,14 +173,14 @@ button.save-bill{background:#16743b;font-size:17px;padding:14px 24px;min-height:
 <button type="button" onclick="savePreviewRack()">Save Rack</button>
 <button type="button" class="secondary" onclick="deliverPreviewBill()">Delivered</button>
 </div></section><div id="previewpaper" style="background:white;box-shadow:0 8px 30px #1115;border-radius:8px;overflow:auto"></div><p style="color:white;text-align:center">WhatsApp opens a prefilled message. Attach the saved PDF manually before sending.</p></div></div><div id="printarea"><div id="invoiceprint"></div></div><script>
-const UPI='BHARATPE2C0Y0N0U1U34312@unitype',KEY='rainbow_billing_v3';let bills=JSON.parse(localStorage.getItem(KEY)||'[]'),currentType='order',editId=null;const $=id=>document.getElementById(id),money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function persist(){
+const UPI='BHARATPE2C0Y0N0U1U34312@unitype',KEY='rainbow_billing_v3';let bills=[],currentType='order',editId=null,editVersion=null;const $=id=>document.getElementById(id),money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function persist(versions={}){
  for(const bill of bills){
   if(bill.type==='order'&&bill.status==='Delivered'){
    delete bill.rackNo;
    delete bill.lastRackNo;
   }
  }
- localStorage.setItem(KEY,JSON.stringify(bills));
+ return syncBills(versions);
 }function show(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(page).classList.add('active');document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));let t=$('tab'+page);if(t)t.classList.add('active');if(page==='dashboard')renderDashboard();if(page==='history')renderHistory();if(page==='credit')renderCredit();if(page==='production'){renderProduction();renderStages()}if(page==='settings'){makeQR();loadShop()}if(page==='reports')$('exportmonth').value=new Date().toISOString().slice(0,7)}
 function nextNo(type){let prefix=type==='order'?'RS':'DS',nums=bills.filter(x=>x.type===type).map(x=>Number(x.no.split('-').pop())||0);return prefix+'-'+String(Math.max(0,...nums)+1).padStart(4,'0')}
 function billingTypeLabel(bill){
@@ -189,7 +189,7 @@ function billingTypeLabel(bill){
  return bill.orderCategory==='single'?'Single Order':'Team Order';
 }
 function toggleTeamName(){const team=$('ordertype').value==='team';$('teamnamebox').style.display=team?'':'none'}
-function newBill(type){resetAttachmentDraft();renderDiary();$('pocketdiary').open=false;$('village').value='';currentType=type;editId=null;$('editortitle').textContent=(type==='order'?'Customer Order':'Direct Sale')+' — '+nextNo(type);['customer','mobile','deliverydate','email','remarks','receiver','receiverphone','address','city','district','pincode','landmark'].forEach(id=>$(id).value='');$('state').value='Tamil Nadu';$('ordertype').value='team';$('teamname').value='';setBillGst();$('ordertypepanel').style.display=type==='order'?'':'none';toggleTeamName();$('redeem').value=0;$('discount').value=0;$('customerhistory').textContent='';$('customer').dataset.autofilled='no';lastAutoPhone='';$('phonehint').textContent='Enter existing mobile number to fill customer name automatically.';$('takenby').value='';$('deliveredby').value='';$('billdate').value=new Date().toLocaleDateString('en-CA');$('status').value='Pending Bills';$('received').value='0';$('paymode').value='Cash';$('itemrows').innerHTML='';addItem();$('status').parentElement.style.display=type==='direct'?'none':'';$('deliveryfield').style.display=type==='direct'?'none':'';$('extraoptions').open=false;$('couriertoggle').checked=false;$('courierfields').style.display='none';$('rewardpanel').style.display=type==='direct'?'none':'';show('editor');calculate()}
+function newBill(type){editVersion=null;resetAttachmentDraft();renderDiary();$('pocketdiary').open=false;$('village').value='';currentType=type;editId=null;$('editortitle').textContent=(type==='order'?'Customer Order':'Direct Sale')+' — '+nextNo(type)+' (confirmed on save)';['customer','mobile','deliverydate','email','remarks','receiver','receiverphone','address','city','district','pincode','landmark'].forEach(id=>$(id).value='');$('state').value='Tamil Nadu';$('ordertype').value='team';$('teamname').value='';setBillGst();$('ordertypepanel').style.display=type==='order'?'':'none';toggleTeamName();$('redeem').value=0;$('discount').value=0;$('customerhistory').textContent='';$('customer').dataset.autofilled='no';lastAutoPhone='';$('phonehint').textContent='Enter existing mobile number to fill customer name automatically.';$('takenby').value='';$('deliveredby').value='';$('billdate').value=new Date().toLocaleDateString('en-CA');$('status').value='Pending Bills';$('received').value='0';$('paymode').value='Cash';$('itemrows').innerHTML='';addItem();$('status').parentElement.style.display=type==='direct'?'none':'';$('deliveryfield').style.display=type==='direct'?'none':'';$('extraoptions').open=false;$('couriertoggle').checked=false;$('courierfields').style.display='none';$('rewardpanel').style.display=type==='direct'?'none':'';show('editor');calculate()}
 function renumberItemRows(){
  Array.from($('itemrows').rows).forEach((row,index)=>{
   row.cells[0].textContent=String(index+1);
@@ -256,7 +256,7 @@ async function savePreparedBill(){let b=formBill();if(!b.items.length||b.items.e
  if(b.type==='order'&&b.status==='Ready in Rack'&&!b.rackNo&&!reserveRack(b))return;
  if(i>=0&&bills[i].cutCompleted)b.cutCompleted=true;
  if(i>=0)bills[i]=b;else bills.push(b);
- persist();try{await commitAttachments(b.id)}catch(e){alert('Bill saved, but attachments could not be saved: '+e.message);return}show('history');printInvoice(b)}
+ if(!await persist(i>=0?{[b.id]:editVersion}:{}))return;try{await commitAttachments(b.id)}catch(e){alert('Bill saved, but attachments could not be saved: '+e.message);return}show('history');printInvoice(b)}
 function paid(b){return (b.payments||[]).reduce((s,p)=>s+p.amount,0)}function balance(b){return Math.max(0,b.total-paid(b))}let skippedPending=new Set();function resetSkipped(){skippedPending.clear();renderDashboard()}function skipPending(id){skippedPending.add(id);renderDashboard()}function searchBill(b,q){return [b.no,b.customer,b.mobile,villageName(b),b.teamName,b.orderCategory,billingTypeLabel(b),b.id].some(v=>String(v??'').toLowerCase().includes(q))}function latestProcess(b){
  if(b.status==='Delivered')return 'Delivered';
  if(b.status==='Courier / Bus')return 'Courier / Bus';
@@ -348,7 +348,7 @@ function tableBills(arr,numberRows=false){
  if(!reserveRack(b)){renderHistory();renderDashboard();renderCredit();return}
  }else b.status=s;
  persist();renderHistory();renderDashboard();renderCredit()}
-function editBill(id){let b=bills.find(x=>x.id===id);if(!b)return;newBill(b.type);editId=id;$('village').value=villageName(b);renderDiary(Array.isArray(b.diary)?b.diary:[]);loadBillAttachments(id);$('editortitle').textContent='Edit '+b.no;['customer','mobile','deliverydate','email','remarks','receiver','receiverphone','address','city','district','state','pincode','landmark','email','takenby','deliveredby'].forEach(k=>$(k).value=b[k]||'');$('couriertoggle').checked=!!(b.receiver||b.address||b.pincode);$('courierfields').style.display=$('couriertoggle').checked?'block':'none';$('ordertype').value=b.orderCategory||'team';$('teamname').value=b.teamName||'';toggleTeamName();$('redeem').value=b.redeemed||0;$('discount').value=b.discount||0;$('billdate').value=b.date;$('status').value=b.status;$('itemrows').innerHTML='';setBillGst(b.items);b.items.forEach(addItem);$('received').value=0;calculate()}
+function editBill(id){let b=bills.find(x=>x.id===id);if(!b)return;newBill(b.type);editId=id;editVersion=syncMeta.get(id)?.version??null;$('village').value=villageName(b);renderDiary(Array.isArray(b.diary)?b.diary:[]);loadBillAttachments(id);$('editortitle').textContent='Edit '+b.no;['customer','mobile','deliverydate','email','remarks','receiver','receiverphone','address','city','district','state','pincode','landmark','email','takenby','deliveredby'].forEach(k=>$(k).value=b[k]||'');$('couriertoggle').checked=!!(b.receiver||b.address||b.pincode);$('courierfields').style.display=$('couriertoggle').checked?'block':'none';$('ordertype').value=b.orderCategory||'team';$('teamname').value=b.teamName||'';toggleTeamName();$('redeem').value=b.redeemed||0;$('discount').value=b.discount||0;$('billdate').value=b.date;$('status').value=b.status;$('itemrows').innerHTML='';setBillGst(b.items);b.items.forEach(addItem);$('received').value=0;calculate()}
 function addPayment(id){let b=bills.find(x=>x.id===id),due=balance(b);if(due<=0)return alert('Fully paid');let input=prompt('Balance '+money(due)+'\nEnter payment received:',String(due));if(input===null)return;let n=Number(input);if(!Number.isFinite(n)||n<=0||n>due+0.001)return alert('Invalid amount');let mode=prompt('Payment mode (Cash / UPI / Bank):','UPI')||'Other';b.payments.push({amount:n,date:new Date().toISOString(),mode});persist();renderHistory();renderCredit()}
 function previewDraft(){let b=formBill();delete b.newPaid;printInvoice(b)}function printBill(id){let b=bills.find(x=>x.id===id);if(b)printInvoice(b)}function qrUri(amount){let p=new URLSearchParams({pa:UPI,pn:'RAINBOW SPORTS',cu:'INR'});if(Number(amount)>0)p.set('am',Number(amount).toFixed(2));return 'upi://pay?'+p.toString()}
 function qrInto(el,amount,size=130){el.innerHTML='';if(typeof QRCode==='undefined'){el.textContent='QR generator needs internet access';return}new QRCode(el,{text:qrUri(amount),width:size,height:size,correctLevel:QRCode.CorrectLevel.M})}function makeQR(){qrInto($('dynamicqr'),$('qramount').value,140)}
@@ -392,7 +392,7 @@ function whatsappCurrent(){whatsappBill(activePreviewBill)}
 function sendWhatsApp(id){whatsappBill(bills.find(b=>b.id===id))}
 function whatsappDraft(){const b=formBill();if(!b.items.length)return alert('Add products first.');whatsappBill(b)}
 
-function backup(){let blob=new Blob([JSON.stringify({version:3,bills},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='rainbow-billing-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url)}function restoreBackup(e){let file=e.target.files[0];if(!file)return;file.text().then(s=>{let d=JSON.parse(s);if(!Array.isArray(d.bills))throw Error('Invalid backup');if(!confirm('Replace current bills with backup?'))return;bills=d.bills;persist();show('dashboard');alert('Backup restored')}).catch(err=>alert(err.message))}show('dashboard');
+function backup(){let blob=new Blob([JSON.stringify({version:3,bills},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='rainbow-billing-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url)}function restoreBackup(e){let file=e.target.files[0];e.target.value='';if(!file)return;file.text().then(text=>{let d=JSON.parse(text.replace(/^\uFEFF/,''));let list=Array.isArray(d)?d:d.bills;if(!Array.isArray(list))throw Error('This file is not a Rainbow billing backup.');return startImport(list,'backup file “'+file.name+'”',false)}).catch(err=>alert('Cannot read backup: '+err.message))}
 
 function renderDiary(rows=[]){
  const columns=[['size','Size'],['qty','Qty'],['note','Instructions']];
@@ -487,7 +487,7 @@ function deliverProduction(id){
 }
 let activeStageBill=null;
 function openStages(id){const b=bills.find(x=>x.id===id);if(!b||b.type!=='order')return;activeStageBill=id;show('production');stageeditor.scrollIntoView({block:'start'})}
-function renderStages(){const b=bills.find(x=>x.id===activeStageBill),el=$('stageeditor');el.hidden=!b;if(!b){el.innerHTML='';return}b.stages=b.stages||[];el.innerHTML='<h3>'+esc(b.no)+' — '+esc(b.customer)+'</h3><p class="muted">Any number of optional steps. Tick completed steps, edit names and notes, move steps up/down, or remove them. Changes save immediately on this device.</p>'+b.stages.map((st,i)=>'<div class="stage-row"><input type="checkbox" '+(st.done?'checked':'')+' onchange="changeStage('+i+',&quot;done&quot;,this.checked)" aria-label="Stage complete"><input type="text" value="'+esc(st.name)+'" onchange="changeStage('+i+',&quot;name&quot;,this.value)" aria-label="Stage name"><input class="stage-note" type="text" placeholder="Reminder / Notes" value="'+esc(st.note||'')+'" onchange="changeStage('+i+',&quot;note&quot;,this.value)"><button class="secondary" onclick="shiftStage('+i+',-1)" '+(i===0?'disabled':'')+'>↑</button><button class="secondary" onclick="shiftStage('+i+',1)" '+(i===b.stages.length-1?'disabled':'')+'>↓</button><button class="secondary" onclick="removeStage('+i+')">✕</button></div>').join('')+'<div class="stage-controls"><input id="nextstage" placeholder="Next stage (e.g. Cutting / Printing)" list="stagechoices"><datalist id="stagechoices"><option value="Order Received"><option value="Cutting"><option value="Printing"><option value="Stitching"><option value="Checking"><option value="Packing"><option value="Rack"><option value="Courier / Bus"><option value="Delivered"></datalist><button onclick="addStage()">+ Add Stage</button><button class="secondary" onclick="show(&quot;history&quot;)">Back to Bill History</button></div><p class="muted">Completed '+b.stages.filter(x=>x.done).length+' / '+b.stages.length+' stages</p>'}
+function renderStages(){const b=bills.find(x=>x.id===activeStageBill),el=$('stageeditor');el.hidden=!b;if(!b){el.innerHTML='';return}b.stages=b.stages||[];el.innerHTML='<h3>'+esc(b.no)+' — '+esc(b.customer)+'</h3><p class="muted">Any number of optional steps. Tick completed steps, edit names and notes, move steps up/down, or remove them. Changes save immediately for all staff.</p>'+b.stages.map((st,i)=>'<div class="stage-row"><input type="checkbox" '+(st.done?'checked':'')+' onchange="changeStage('+i+',&quot;done&quot;,this.checked)" aria-label="Stage complete"><input type="text" value="'+esc(st.name)+'" onchange="changeStage('+i+',&quot;name&quot;,this.value)" aria-label="Stage name"><input class="stage-note" type="text" placeholder="Reminder / Notes" value="'+esc(st.note||'')+'" onchange="changeStage('+i+',&quot;note&quot;,this.value)"><button class="secondary" onclick="shiftStage('+i+',-1)" '+(i===0?'disabled':'')+'>↑</button><button class="secondary" onclick="shiftStage('+i+',1)" '+(i===b.stages.length-1?'disabled':'')+'>↓</button><button class="secondary" onclick="removeStage('+i+')">✕</button></div>').join('')+'<div class="stage-controls"><input id="nextstage" placeholder="Next stage (e.g. Cutting / Printing)" list="stagechoices"><datalist id="stagechoices"><option value="Order Received"><option value="Cutting"><option value="Printing"><option value="Stitching"><option value="Checking"><option value="Packing"><option value="Rack"><option value="Courier / Bus"><option value="Delivered"></datalist><button onclick="addStage()">+ Add Stage</button><button class="secondary" onclick="show(&quot;history&quot;)">Back to Bill History</button></div><p class="muted">Completed '+b.stages.filter(x=>x.done).length+' / '+b.stages.length+' stages</p>'}
 function changeStage(i,k,v){let b=bills.find(x=>x.id===activeStageBill);if(!b||!b.stages[i])return;b.stages[i][k]=v;if(k==='done')b.stages[i].completedAt=v?new Date().toISOString():null;persist();renderStages()}
 function addStage(){let b=bills.find(x=>x.id===activeStageBill),name=$('nextstage').value.trim();if(!b||!name)return alert('Enter stage name');b.stages.push({name,done:false,note:'',completedAt:null});persist();renderStages()}
 function removeStage(i){let b=bills.find(x=>x.id===activeStageBill);if(!b)return;b.stages.splice(i,1);persist();renderStages()}
@@ -527,9 +527,9 @@ function lookupCustomer(){autoFillCustomerByPhone();let list=customerBills($('mo
 function viewCustomerBills(){let list=customerBills($('mobile').value.trim());$('customerhistory').innerHTML=list.length?list.map(b=>'<p>'+esc(b.no)+' | '+esc(b.date)+' | '+money(b.total)+' <button class="secondary" onclick="printBill(\''+b.id+'\')">Print</button></p>').join(''):'No previous bills found'}
 function availableCoins(phone,excludeId){if(!phone)return 0;let earned=0,used=0;for(let b of bills){if(b.type!=='order'||b.mobile!==phone)continue;if(b.id!==excludeId)used+=Number(b.redeemed)||0;if(balance(b)<0.01)earned+=Math.floor(Number(b.total||0)/100)}return Math.max(0,earned-used)}
 function validRedeem(gross){if(currentType!=='order')return 0;let n=Number($('redeem').value)||0;return Math.min(Math.max(0,Math.floor(n)),availableCoins($('mobile').value.trim(),editId),Math.floor(gross))}
-function shopDetails(){return JSON.parse(localStorage.getItem('rainbow_shop_details')||'{}')}
+let sharedShop=null;function shopDetails(){if(sharedShop)return sharedShop;try{return JSON.parse(localStorage.getItem('rainbow_shop_details')||'{}')}catch{return {}}}
 function loadShop(){let d=shopDetails();for(let k of ['shopname','shopphone','shopaddress','shoppin','shopgst'])if(d[k])$(k).value=d[k]}
-function saveShop(){let d={};for(let k of ['shopname','shopphone','shopaddress','shoppin','shopgst'])d[k]=$(k).value;localStorage.setItem('rainbow_shop_details',JSON.stringify(d));alert('Shop details saved')}
+async function saveShop(){let d={};for(let k of ['shopname','shopphone','shopaddress','shoppin','shopgst'])d[k]=$(k).value;try{sharedShop=(await api('/api/settings/shop',{method:'PUT',body:{shop:d}})).shop;alert('Shop details saved for all staff')}catch(e){alert('Shop details not saved: '+e.message)}}
 function printCourier(id){let b=bills.find(x=>x.id===id);if(!b)return;let d=shopDetails();$('invoiceprint').innerHTML='<h1>COURIER / PARCEL LABEL</h1><div style="border:2px solid #111;padding:18px;margin:15px 0"><h2>FROM</h2><b>'+esc(d.shopname||'RAINBOW SPORTS')+'</b><p>'+esc(d.shopaddress||'Bommidi, Dharmapuri, Tamil Nadu')+'</p><p>PIN: '+esc(d.shoppin||'Not set')+' | Phone: '+esc(d.shopphone||'9943295343')+'</p><p>GSTIN: '+esc(d.shopgst||'Not set')+'</p></div><div style="border:2px solid #111;padding:18px"><h2>TO</h2><b>'+esc(b.receiver||b.customer)+'</b><p>'+[b.address,b.landmark,b.city,b.district,b.state,b.pincode].filter(Boolean).map(esc).join(', ')+'</p><p>Phone: '+esc(b.receiverphone||b.mobile)+'</p><h2>Invoice: '+esc(b.no)+'</h2></div>';setTimeout(openPrintDialog,150)}
 function exportMonthly(){let m=$('exportmonth').value,cat=$('exportcategory').value,type=$('exporttype').value,category=$('exportordercategory').value;if(!m)return alert('Select month');let rows=bills.filter(b=>b.date?.startsWith(m)&&(type==='all'||b.type===type)&&(category==='all'||(b.type==='order'&&(b.orderCategory||'team')===category))&&(cat==='all'||(cat==='gst'?b.items.some(i=>Number(i.gst)>0):b.items.every(i=>Number(i.gst)===0))));let head=['Invoice','Date','Customer','Phone','Type','Order Category','Team Name','Taxable Value','Included GST','Discount Amount','Discount Coins','Total','Paid','Balance','Status'];let csv=[head,...rows.map(b=>[b.no,b.date,b.customer,b.mobile,b.type,b.type==='order'?billingTypeLabel(b):"",b.teamName||"",b.subtotal,b.tax,b.discount||0,b.redeemed||0,b.total,paid(b),balance(b),b.status])].map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');let blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Rainbow_'+cat+'_'+m+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 
@@ -549,18 +549,42 @@ async function startInvoicePrint(){
  closePrintDialog();closeInvoicePreview();setTimeout(()=>window.print(),120)
 }
 </script><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script>
-// Files live in IndexedDB (not localStorage). They remain private to this browser/profile.
+// Attachments are stored on the shared server so every PC and phone sees them.
+// The old browser-only store (IndexedDB) is only read, never changed, when importing old bills.
 let attachDraft=[],recorder=null,attachLoadToken=0,attachmentLoading=false,attachmentLoadFailed=false,recordStarting=false;
 let invoiceDesignLoad=Promise.resolve(), invoiceDesignUrls=[];
-const attachDb=new Promise((resolve,reject)=>{let req=indexedDB.open('rainbow_invoice_attachments',1);req.onupgradeneeded=()=>{let db=req.result;if(!db.objectStoreNames.contains('files'))db.createObjectStore('files',{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});
-function attachmentTransaction(mode,action){return attachDb.then(db=>new Promise((resolve,reject)=>{let tx=db.transaction('files',mode),store=tx.objectStore('files');let request=action(store);request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)}))}
-function attachmentGetAll(){return attachmentTransaction('readonly',s=>s.getAll())}
-function attachmentPut(item){return attachmentTransaction('readwrite',s=>s.put(item))}
-function attachmentDelete(id){return attachmentTransaction('readwrite',s=>s.delete(id))}
+const attachmentBlobCache=new Map(),MAX_ATTACHMENT=4*1024*1024;
+function legacyAttachments(){
+ if(typeof indexedDB==='undefined')return Promise.resolve([]);
+ return new Promise((resolve,reject)=>{
+  const req=indexedDB.open('rainbow_invoice_attachments',1);
+  req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('files'))db.createObjectStore('files',{keyPath:'id'})};
+  req.onerror=()=>reject(req.error);
+  req.onsuccess=()=>{const all=req.result.transaction('files','readonly').objectStore('files').getAll();all.onsuccess=()=>resolve(all.result||[]);all.onerror=()=>reject(all.error)};
+ });
+}
+async function serverAttachments(billId){
+ if(!billId||!syncMeta.has(billId))return [];
+ const result=await api('/api/attachments?bill='+encodeURIComponent(billId));
+ return result.attachments.map(item=>({...item,remote:true}));
+}
+async function attachmentBlob(item){
+ if(item.blob instanceof Blob)return item.blob;
+ if(!attachmentBlobCache.has(item.id)){
+  const response=await api('/api/attachments/'+encodeURIComponent(item.id),{raw:true,timeout:60000});
+  attachmentBlobCache.set(item.id,await response.blob());
+ }
+ return item.blob=attachmentBlobCache.get(item.id);
+}
+async function uploadAttachment(item,billId){
+ const params=new URLSearchParams({id:item.id,bill:billId,kind:item.kind,name:item.name});
+ await api('/api/attachments?'+params,{method:'POST',body:item.blob,headers:{'Content-Type':item.blob.type||'application/octet-stream'},timeout:90000});
+ attachmentBlobCache.set(item.id,item.blob);
+}
 function resetAttachmentDraft(){attachLoadToken++;attachmentLoading=false;attachmentLoadFailed=false;attachDraft=[];if(recorder&&recorder.state==='recording')recorder.stop();let list=document.getElementById('attachmentlist');if(list)list.innerHTML='';let preview=document.getElementById('attachmentpreview');if(preview)preview.innerHTML='';let section=document.getElementById('attachmentsection');if(section)section.open=false;let status=document.getElementById('recordstatus');if(status)status.textContent=''}
-async function loadBillAttachments(billId){let token=++attachLoadToken;attachmentLoading=true;try{let files=await attachmentGetAll();if(token!==attachLoadToken)return;attachDraft=files.filter(x=>x.billId===billId).map(x=>({...x}));renderAttachments()}catch(e){if(token===attachLoadToken){attachmentLoadFailed=true;alert('Cannot open saved attachments: '+e.message)}}finally{if(token===attachLoadToken)attachmentLoading=false}}
+async function loadBillAttachments(billId){let token=++attachLoadToken;attachmentLoading=true;try{let files=await serverAttachments(billId);if(token!==attachLoadToken)return;attachDraft=files;renderAttachments()}catch(e){if(token===attachLoadToken){attachmentLoadFailed=true;alert('Cannot open saved attachments: '+e.message)}}finally{if(token===attachLoadToken)attachmentLoading=false}}
 function supportedDesign(file){return /^(image\/(jpeg|png|webp))$/.test(file.type)||(!file.type&&/\.(jpe?g|png|webp)$/i.test(file.name))}
-async function addAttachments(input,kind){if(attachmentLoading){input.value='';return alert('Wait for saved attachments to load.')}let files=Array.from(input.files||[]);for(let f of files){if(kind==='image'&&!supportedDesign(f))continue;if(kind==='excel'&&!/\.(xlsx|xls|csv)$/i.test(f.name))continue;attachDraft.push({id:crypto.randomUUID(),billId:editId||null,name:f.name,kind,blob:f,created:new Date().toISOString()})}input.value='';renderAttachments();document.getElementById('attachmentsection').open=true}
+async function addAttachments(input,kind){if(attachmentLoading){input.value='';return alert('Wait for saved attachments to load.')}let files=Array.from(input.files||[]);for(let f of files){if(f.size>MAX_ATTACHMENT){alert(f.name+' is larger than 4 MB and was not added.');continue}if(kind==='image'&&!supportedDesign(f))continue;if(kind==='excel'&&!/\.(xlsx|xls|csv)$/i.test(f.name))continue;attachDraft.push({id:crypto.randomUUID(),billId:editId||null,name:f.name,kind,blob:f,created:new Date().toISOString()})}input.value='';renderAttachments();document.getElementById('attachmentsection').open=true}
 async function toggleVoiceRecording(){
  if(recorder?.state==='recording'){recorder.stop();return}
  if(recordStarting||recorder||attachmentLoading)return;
@@ -582,6 +606,7 @@ async function toggleVoiceRecording(){
    const type=recording.mimeType||chunks[0]?.type||'audio/webm';
    const extension=type.includes('mp4')?'m4a':type.includes('ogg')?'ogg':'webm';
    const blob=new Blob(chunks,{type});
+   if(blob.size>MAX_ATTACHMENT){$('recordstatus').textContent='Voice note is longer than the 4 MB limit. Record a shorter note.';return}
    if(blob.size)attachDraft.push({id:crypto.randomUUID(),billId:editId||null,name:'Voice_'+Date.now()+'.'+extension,kind:'audio',blob,created:new Date().toISOString()});
    $('recordstatus').textContent=blob.size?'Voice note recorded. Save Bill to keep it.':'No audio was recorded.';
    $('attachmentsection').open=true;
@@ -600,10 +625,12 @@ function loadInvoiceDesigns(bill){
  invoiceDesignUrls.forEach(url=>URL.revokeObjectURL(url));
  invoiceDesignUrls=[];
  invoiceDesignLoad=(async()=>{
-  const files=$('editor').classList.contains('active')?attachDraft:
-   (await attachmentGetAll()).filter(item=>item.billId===bill.id);
+  const files=$('editor').classList.contains('active')?attachDraft:await serverAttachments(bill.id);
+  const designs=[];
+  for(const item of files.filter(item=>item.kind==='image')){
+   try{await attachmentBlob(item);designs.push(item)}catch(error){console.warn('Design image unavailable',error)}
+  }
   if(!printSection.isConnected)return;
-  const designs=files.filter(item=>item.kind==='image'&&item.blob instanceof Blob);
   if(!designs.length)return;
   printSection.hidden=false;
   previewSection.hidden=false;
@@ -630,26 +657,254 @@ function loadInvoiceDesigns(bill){
 }
 function renderAttachments(){let el=document.getElementById('attachmentlist');if(!el)return;el.innerHTML=attachDraft.length?attachDraft.map((a,i)=>'<div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #ddd;padding:8px 0"><span style="flex:1;min-width:140px">'+esc(a.name)+' ('+a.kind+')</span><button type="button" class="secondary" onclick="previewAttachment('+i+')">Preview</button><button type="button" class="secondary" onclick="downloadAttachment('+i+')">Download</button><button type="button" class="secondary" onclick="replaceAttachment('+i+')">Replace</button><button type="button" class="danger" onclick="removeAttachment('+i+')">Delete</button></div>').join(''):'<p class="muted">No attachments added. You can save without them.</p>'}
 function removeAttachment(i){let a=attachDraft[i];if(!a||!confirm('Delete '+a.name+'? Save Bill to confirm changes.'))return;attachDraft.splice(i,1);renderAttachments();document.getElementById('attachmentpreview').innerHTML=''}
-function replaceAttachment(i){let a=attachDraft[i];if(!a)return;let input=document.createElement('input');input.type='file';input.accept=a.kind==='image'?'.jpg,.jpeg,.png,.webp':a.kind==='excel'?'.xlsx,.xls,.csv':'audio/*';input.onchange=()=>{let f=input.files?.[0];if(!f)return;if(a.kind==='image'&&!supportedDesign(f))return alert('Choose JPG, PNG or WebP');if(a.kind==='excel'&&!/\.(xlsx|xls|csv)$/i.test(f.name))return alert('Choose Excel or CSV');attachDraft[i]={...a,name:f.name,blob:f,created:new Date().toISOString()};renderAttachments();document.getElementById('attachmentpreview').innerHTML=''};input.click()}
-function downloadAttachment(i){let a=attachDraft[i];if(!a)return;let url=URL.createObjectURL(a.blob),link=document.createElement('a');link.href=url;link.download=a.name;link.click();setTimeout(()=>URL.revokeObjectURL(url),3000)}
-async function previewAttachment(i){let a=attachDraft[i],box=document.getElementById('attachmentpreview');if(!a)return;box.innerHTML='';if(a.kind==='image'||a.kind==='audio'){let url=URL.createObjectURL(a.blob),el=document.createElement(a.kind==='image'?'img':'audio');el.src=url;if(a.kind==='audio')el.controls=true;else{el.style.maxWidth='100%';el.style.maxHeight='400px'}box.appendChild(el);return}if(/\.csv$/i.test(a.name)){let text=await a.blob.text();renderCsvPreview(text,box);return}if(typeof XLSX!=='undefined'){try{let bytes=await a.blob.arrayBuffer(),wb=XLSX.read(bytes,{type:'array'});let select=document.createElement('select');for(let name of wb.SheetNames){let opt=document.createElement('option');opt.textContent=name;select.appendChild(opt)}let holder=document.createElement('div');box.append(select,holder);let show=()=>{holder.innerHTML=XLSX.utils.sheet_to_html(wb.Sheets[select.value],{editable:false})};select.onchange=show;show();return}catch(e){box.textContent='Preview failed: '+e.message;return}}box.textContent='Excel preview library is unavailable offline. Download the original Excel file to view it.'}
+function replaceAttachment(i){let a=attachDraft[i];if(!a)return;let input=document.createElement('input');input.type='file';input.accept=a.kind==='image'?'.jpg,.jpeg,.png,.webp':a.kind==='excel'?'.xlsx,.xls,.csv':'audio/*';input.onchange=()=>{let f=input.files?.[0];if(!f)return;if(a.kind==='image'&&!supportedDesign(f))return alert('Choose JPG, PNG or WebP');if(a.kind==='excel'&&!/\.(xlsx|xls|csv)$/i.test(f.name))return alert('Choose Excel or CSV');if(f.size>MAX_ATTACHMENT)return alert('Each attachment must be 4 MB or smaller.');attachDraft[i]={...a,id:crypto.randomUUID(),remote:false,name:f.name,blob:f,created:new Date().toISOString()};renderAttachments();document.getElementById('attachmentpreview').innerHTML=''};input.click()}
+async function downloadAttachment(i){let a=attachDraft[i];if(!a)return;let blob;try{blob=await attachmentBlob(a)}catch(e){return alert('Cannot download: '+e.message)}let url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=a.name;link.click();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+async function previewAttachment(i){let a=attachDraft[i],box=document.getElementById('attachmentpreview');if(!a)return;box.innerHTML='Loading…';try{await attachmentBlob(a)}catch(e){box.textContent='Cannot load attachment: '+e.message;return}box.innerHTML='';if(a.kind==='image'||a.kind==='audio'){let url=URL.createObjectURL(a.blob),el=document.createElement(a.kind==='image'?'img':'audio');el.src=url;if(a.kind==='audio')el.controls=true;else{el.style.maxWidth='100%';el.style.maxHeight='400px'}box.appendChild(el);return}if(/\.csv$/i.test(a.name)){let text=await a.blob.text();renderCsvPreview(text,box);return}if(typeof XLSX!=='undefined'){try{let bytes=await a.blob.arrayBuffer(),wb=XLSX.read(bytes,{type:'array'});let select=document.createElement('select');for(let name of wb.SheetNames){let opt=document.createElement('option');opt.textContent=name;select.appendChild(opt)}let holder=document.createElement('div');box.append(select,holder);let show=()=>{holder.innerHTML=XLSX.utils.sheet_to_html(wb.Sheets[select.value],{editable:false})};select.onchange=show;show();return}catch(e){box.textContent='Preview failed: '+e.message;return}}box.textContent='Excel preview library is unavailable offline. Download the original Excel file to view it.'}
 function renderCsvPreview(text,box){let rows=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean).slice(0,150).map(line=>line.split(','));let table=document.createElement('table');for(let row of rows){let tr=document.createElement('tr');for(let value of row){let td=document.createElement('td');td.textContent=value;tr.appendChild(td)}table.appendChild(tr)}box.appendChild(table)}
 async function commitAttachments(billId){
- const files=attachDraft.map(item=>({...item,billId}));
- const db=await attachDb;
- await new Promise((resolve,reject)=>{
-  const transaction=db.transaction('files','readwrite');
-  const store=transaction.objectStore('files');
-  const keep=new Set(files.map(item=>item.id));
-  transaction.oncomplete=()=>resolve();
-  transaction.onabort=()=>reject(transaction.error||Error('Attachment save was interrupted'));
-  const request=store.getAll();
-  request.onsuccess=()=>{
-   for(const item of request.result){
-    if(item.billId===billId&&!keep.has(item.id))store.delete(item.id);
-   }
-   for(const item of files)store.put(item);
-  };
- });
+ const saved=await serverAttachments(billId);
+ const keep=new Set(attachDraft.map(item=>item.id));
+ const savedIds=new Set(saved.map(item=>item.id));
+ for(const item of saved)if(!keep.has(item.id))await api('/api/attachments/'+encodeURIComponent(item.id),{method:'DELETE'});
+ for(const item of attachDraft){
+  if(savedIds.has(item.id))continue;
+  if(!(item.blob instanceof Blob))continue; // removed by another staff member and not cached here
+  await uploadAttachment(item,billId);
+ }
+ attachDraft.forEach(item=>{item.remote=true;item.billId=billId});
 }
+</script><script>
+// ===== Shared online database: login, sync, import =====
+const syncMeta=new Map(); // bill id -> {version, json, sequence} as last confirmed by the server
+let syncSeq=0,syncChain=Promise.resolve(true),currentUser=null,pollTimer=null,pendingRender=false,needsSetup=false;
+class ApiError extends Error{constructor(status,message){super(message);this.status=status}}
+async function api(path,options={}){
+ const headers={'X-Rainbow-Client':'1',...(options.headers||{})};
+ let body=options.body;
+ if(body!==undefined&&!(body instanceof Blob)&&typeof body!=='string'){body=JSON.stringify(body);headers['Content-Type']='application/json'}
+ let response;
+ try{response=await fetch(path,{method:options.method||'GET',body,headers,cache:'no-store',credentials:'same-origin',signal:AbortSignal.timeout(options.timeout||30000)})}
+ catch(error){setSyncState('offline');throw new ApiError(0,'Cannot reach the server. Check the internet connection and try again.')}
+ if(response.status===401&&!path.startsWith('/api/auth/')){stopPolling();showLogin('Your login has ended. Please sign in again.')}
+ if(!response.ok){let message='Server error ('+response.status+')';try{message=(await response.json()).error||message}catch{}throw new ApiError(response.status,message)}
+ return options.raw?response:response.json();
+}
+function setSyncState(state){
+ const el=$('syncstate');if(!el)return;
+ el.classList.toggle('offline',state==='offline');
+ el.textContent=state==='saving'?'● Saving…':state==='offline'?'● Offline — changes are not being saved':'● Synced with all devices';
+}
+function billOrder(bill){return syncMeta.get(bill.id)?.sequence??Number.MAX_SAFE_INTEGER}
+function sortBills(){bills.sort((a,b)=>billOrder(a)-billOrder(b))}
+function applyServerBill(entry){
+ let local=bills.find(bill=>bill.id===entry.bill.id);
+ if(local){for(const key of Object.keys(local))delete local[key];Object.assign(local,entry.bill)}
+ else{local=entry.bill;bills.push(local)}
+ syncMeta.set(local.id,{version:entry.version,sequence:entry.sequence,json:JSON.stringify(local)});
+}
+function unsyncedBills(){return bills.filter(bill=>syncMeta.get(bill.id)?.json!==JSON.stringify(bill))}
+function revertUnsynced(){
+ for(const bill of unsyncedBills()){
+  const meta=syncMeta.get(bill.id);
+  if(meta){const saved=JSON.parse(meta.json);for(const key of Object.keys(bill))delete bill[key];Object.assign(bill,saved)}
+  else bills.splice(bills.indexOf(bill),1);
+ }
+}
+// Sends every bill that changed locally. Returns true when the server confirmed the save.
+function syncBills(versions={}){
+ const run=async()=>{
+  const changed=unsyncedBills();
+  if(!changed.length)return true;
+  const changes=changed.map(bill=>({bill:JSON.parse(JSON.stringify(bill)),version:Object.prototype.hasOwnProperty.call(versions,bill.id)?versions[bill.id]:(syncMeta.get(bill.id)?.version??null)}));
+  setSyncState('saving');
+  try{
+   const result=await api('/api/bills',{method:'POST',body:{changes}});
+   result.bills.forEach(applyServerBill);sortBills();setSyncState('ok');renderActive(true);return true;
+  }catch(error){
+   revertUnsynced();
+   if(error.status!==0)setSyncState('ok');
+   if(error.status!==401)alert('Not saved: '+error.message);
+   if(error.status===409){syncSeq=0;await pullBills().catch(()=>{})}
+   renderActive(true);return false;
+  }
+ };
+ return syncChain=syncChain.then(run,run);
+}
+async function pullBills(){
+ const result=await api('/api/bills?since='+syncSeq);
+ const local=new Set(unsyncedBills().map(bill=>bill.id));
+ for(const entry of result.bills)if(!local.has(entry.bill.id))applyServerBill(entry);
+ syncSeq=result.seq;
+ if(result.bills.length)sortBills();
+ setSyncState('ok');
+ return result.bills.length>0;
+}
+function refreshFromServer(){
+ return syncChain=syncChain.then(async()=>{try{if(await pullBills()||pendingRender)renderActive(false)}catch(error){console.warn(error)}return true});
+}
+function renderActive(force){
+ const page=document.querySelector('.page.active')?.id;
+ const focused=document.activeElement;
+ const typing=focused&&/^(INPUT|SELECT|TEXTAREA)$/.test(focused.tagName)&&!['dashsearch','filtersearch'].includes(focused.id);
+ if(!force&&typing){pendingRender=true;return}
+ pendingRender=false;
+ if(page==='dashboard')renderDashboard();
+ else if(page==='history')renderHistory();
+ else if(page==='credit')renderCredit();
+ else if(page==='production'&&!(typing&&$('stageeditor').contains(focused))){renderProduction();renderStages()}
+}
+function startPolling(){stopPolling();pollTimer=setInterval(()=>{if(document.visibilityState==='visible'&&currentUser)refreshFromServer()},15000)}
+function stopPolling(){if(pollTimer)clearInterval(pollTimer);pollTimer=null}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&currentUser)refreshFromServer()});
+
+// ----- login -----
+function showLogin(message='',setup=needsSetup){
+ currentUser=null;
+ $('loginscreen').classList.remove('hidden');$('userbar').classList.add('hidden');
+ $('setupfields').classList.toggle('hidden',!setup);
+ $('logintitle').textContent=setup?'Create Owner Login':'Staff Login';
+ $('loginbutton').textContent=setup?'Create Admin Login':'Sign in';
+ $('loginpassword').autocomplete=setup?'new-password':'current-password';
+ $('loginerror').textContent=message;
+}
+async function submitLogin(){
+ const button=$('loginbutton');if(button.disabled)return;
+ button.disabled=true;$('loginerror').textContent='';
+ try{
+  const mobile=$('loginmobile').value,password=$('loginpassword').value;
+  if(needsSetup)await api('/api/auth/setup',{method:'POST',body:{setupKey:$('setupkey').value,name:$('setupname').value,mobile,password}});
+  else await api('/api/auth/login',{method:'POST',body:{mobile,password}});
+  $('loginpassword').value='';$('setupkey').value='';
+  await boot();
+ }catch(error){$('loginerror').textContent=error.message}
+ finally{button.disabled=false}
+}
+async function signOut(){
+ if(unsyncedBills().length&&!confirm('Some changes are still saving. Sign out anyway?'))return;
+ try{await api('/api/auth/logout',{method:'POST'})}catch{}
+ stopPolling();bills=[];syncMeta.clear();syncSeq=0;sharedShop=null;attachmentBlobCache.clear();needsSetup=false;
+ showLogin('You have signed out.');
+}
+async function boot(){
+ try{
+  const status=await api('/api/auth/status');
+  needsSetup=status.needsSetup;
+  if(!status.user)return showLogin('',needsSetup);
+  currentUser=status.user;
+  $('loginscreen').classList.add('hidden');$('userbar').classList.remove('hidden');
+  $('username').textContent='👤 '+currentUser.name+(currentUser.role==='admin'?' (Admin)':'');
+  setSyncState('saving');
+  bills=[];syncMeta.clear();syncSeq=0;
+  await pullBills();
+  try{sharedShop=(await api('/api/settings/shop')).shop}catch{}
+  show('dashboard');startPolling();
+ }catch(error){showLogin(error.message||'Cannot connect to the billing server.')}
+}
+
+// ----- account & staff -----
+const showPage=show;
+show=function(page){showPage(page);if(page==='settings')renderAccount();if(currentUser&&page!=='editor')refreshFromServer()};
+function renderAccount(){
+ if(!currentUser)return;
+ $('accountinfo').textContent='Signed in as '+currentUser.name+' · '+currentUser.mobile+' · '+(currentUser.role==='admin'?'Admin':'Staff');
+ $('staffpanel').classList.toggle('hidden',currentUser.role!=='admin');
+ if(currentUser.role==='admin')loadStaff();
+}
+async function changePassword(){
+ try{await api('/api/auth/password',{method:'POST',body:{current:$('pwcurrent').value,next:$('pwnext').value}});$('pwcurrent').value='';$('pwnext').value='';alert('Password changed. Other devices using this login are signed out.')}
+ catch(error){alert(error.message)}
+}
+async function loadStaff(){
+ try{
+  const {staff}=await api('/api/staff');
+  $('stafflist').innerHTML=staff.map(person=>'<div class="staffrow"><span><b>'+esc(person.name)+'</b> · '+esc(person.mobile)+' · '+(person.role==='admin'?'Admin':'Staff')+(person.active?'':' · <b style="color:#b53645">Disabled</b>')+'</span>'+
+   '<button type="button" class="secondary" onclick="resetStaffPassword('+person.id+')">Reset Password</button>'+
+   (person.id===currentUser.id?'':'<button type="button" class="secondary" onclick="updateStaff('+person.id+',{role:&quot;'+(person.role==='admin'?'staff':'admin')+'&quot;})">'+(person.role==='admin'?'Make Staff':'Make Admin')+'</button>'+
+   '<button type="button" class="'+(person.active?'danger':'secondary')+'" onclick="updateStaff('+person.id+',{active:'+(!person.active)+'})">'+(person.active?'Disable':'Enable')+'</button>')+'</div>').join('');
+ }catch(error){$('stafflist').textContent='Cannot load staff: '+error.message}
+}
+async function updateStaff(id,changes){
+ if(changes.active===false&&!confirm('Disable this staff login? They will be signed out on all devices.'))return;
+ try{await api('/api/staff/'+id,{method:'PATCH',body:changes});loadStaff()}catch(error){alert(error.message)}
+}
+async function resetStaffPassword(id){
+ const password=prompt('Enter a new password for this staff member (min 8 characters):');
+ if(password===null)return;
+ try{await api('/api/staff/'+id,{method:'PATCH',body:{password}});alert('Password reset. Share it with the staff member privately.')}catch(error){alert(error.message)}
+}
+async function addStaff(){
+ try{
+  await api('/api/staff',{method:'POST',body:{name:$('newstaffname').value,mobile:$('newstaffmobile').value,password:$('newstaffpassword').value,role:$('newstaffrole').value}});
+  for(const id of ['newstaffname','newstaffmobile','newstaffpassword'])$(id).value='';
+  loadStaff();alert('Staff login added.');
+ }catch(error){alert(error.message)}
+}
+
+// ----- safe import (JSON backup or this browser's old local data) -----
+let importJob=null;
+function importChunks(list){const chunks=[];for(let i=0;i<list.length;i+=200)chunks.push(list.slice(i,i+200));return chunks}
+async function startImport(list,source,fromBrowser){
+ const panel=$('importpanel');panel.classList.remove('hidden');
+ if(!list.length){panel.innerHTML='<b>No bills found in the '+esc(source)+'.</b>';return}
+ panel.innerHTML='Checking '+list.length+' bills against the shared database…';
+ try{
+  const total={added:0,duplicates:0,conflicts:0,invalid:0,conflictNumbers:[]};
+  for(const chunk of importChunks(list)){
+   const r=await api('/api/import',{method:'POST',body:{bills:chunk,commit:false},timeout:60000});
+   for(const key of ['added','duplicates','conflicts','invalid'])total[key]+=r[key];
+   total.conflictNumbers.push(...r.conflictNumbers);
+  }
+  importJob={list,source,fromBrowser};
+  panel.innerHTML='<h3>Import check — '+esc(source)+'</h3><ul>'+
+   '<li><b>'+total.added+'</b> new bills will be added with their original invoice numbers</li>'+
+   '<li><b>'+total.duplicates+'</b> bills are already in the shared database and will be skipped</li>'+
+   (total.conflicts?'<li><b>'+total.conflicts+'</b> bills use an invoice number already taken by a different bill ('+esc(total.conflictNumbers.slice(0,12).join(', '))+(total.conflictNumbers.length>12?'…':'')+')</li>':'')+
+   (total.invalid?'<li><b>'+total.invalid+'</b> entries are not valid bills and will be skipped</li>':'')+'</ul>'+
+   (total.conflicts?'<label style="display:flex;gap:8px;align-items:center;font-weight:normal"><input type="checkbox" id="importrenumber" style="width:auto"> Also import the conflicting bills with new invoice numbers (the old number is kept on the bill as “original number”)</label>':'')+
+   '<p class="muted">Nothing is deleted or replaced'+(fromBrowser?'. The bills stay in this browser as well':'')+'.</p>'+
+   '<div class="actions"><button type="button" onclick="commitImport()"'+(total.added||total.conflicts?'':' disabled')+'>Import Now</button><button type="button" class="secondary" onclick="cancelImport()">Cancel</button></div>';
+ }catch(error){panel.innerHTML='<b>Import check failed:</b> '+esc(error.message)}
+}
+function cancelImport(){importJob=null;$('importpanel').classList.add('hidden');$('importpanel').innerHTML=''}
+async function commitImport(){
+ if(!importJob)return;
+ const {list,source,fromBrowser}=importJob;importJob=null;
+ const renumberConflicts=!!$('importrenumber')?.checked;
+ const panel=$('importpanel');panel.innerHTML='Importing… keep this page open.';
+ const total={added:0,duplicates:0,conflicts:0,renumbered:0,invalid:0,racksCleared:0};
+ const onServer=new Set();
+ try{
+  for(const chunk of importChunks(list)){
+   const r=await api('/api/import',{method:'POST',body:{bills:chunk,commit:true,renumberConflicts},timeout:60000});
+   for(const key of Object.keys(total))total[key]+=r[key];
+   r.addedIds.forEach(id=>onServer.add(id));r.existingIds.forEach(id=>onServer.add(id));
+  }
+ }catch(error){panel.innerHTML='<b>Import stopped:</b> '+esc(error.message)+'<br>Bills imported before the error are saved. Running the import again is safe — duplicates are skipped.';await refreshFromServer();return}
+ await refreshFromServer();
+ let files=0,fileErrors=0;
+ if(fromBrowser){
+  panel.innerHTML='Bills imported. Uploading attachments saved in this browser…';
+  try{
+   const local=(await legacyAttachments()).filter(item=>onServer.has(String(item.billId||'').toLowerCase())&&item.blob instanceof Blob&&/^[0-9a-f-]{36}$/i.test(item.id));
+   for(const item of local){
+    if(item.blob.size>MAX_ATTACHMENT){fileErrors++;continue}
+    try{await uploadAttachment({...item,name:item.name||'file',kind:['image','excel','audio'].includes(item.kind)?item.kind:'excel'},item.billId.toLowerCase());files++}catch{fileErrors++}
+   }
+  }catch(error){fileErrors++}
+  if(!sharedShop){try{const old=JSON.parse(localStorage.getItem('rainbow_shop_details')||'null');if(old)sharedShop=(await api('/api/settings/shop',{method:'PUT',body:{shop:old}})).shop}catch{}}
+ }
+ panel.innerHTML='<h3>Import finished — '+esc(source)+'</h3><ul><li><b>'+total.added+'</b> bills added'+(total.renumbered?' ('+total.renumbered+' with new invoice numbers)':'')+'</li><li><b>'+total.duplicates+'</b> duplicates skipped</li>'+
+  (total.conflicts-total.renumbered>0?'<li><b>'+(total.conflicts-total.renumbered)+'</b> bills with a clashing invoice number skipped</li>':'')+
+  (total.racksCleared?'<li><b>'+total.racksCleared+'</b> imported orders had a rack number already in use — their rack was cleared, please re-assign</li>':'')+
+  (fromBrowser?'<li><b>'+files+'</b> attachments uploaded'+(fileErrors?' ('+fileErrors+' could not be uploaded)':'')+'</li>':'')+
+  '</ul><div class="actions"><button type="button" class="secondary" onclick="cancelImport()">Close</button></div>';
+}
+function importBrowserBills(){
+ let list=[];
+ try{list=JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return alert('The bills saved in this browser could not be read.')}
+ if(!Array.isArray(list))list=[];
+ startImport(list,'this browser',true);
+}
+
+boot();
 </script></body></html>
