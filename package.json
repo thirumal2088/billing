@@ -1,0 +1,13 @@
+{
+  "name": "rainbow-sports-billing",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-netlify.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.12",
+    "@netlify/database": "^2.0.4",
+    "@netlify/functions": "^6.1.2"
+  }
+}
